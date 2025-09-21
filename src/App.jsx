@@ -124,9 +124,7 @@ function App() {
   <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center">
     {/* Profile Image */}
     <div className="hero-img-wrapper mb-8">
-      <img
-        src="/me.png"
-        alt="Abhinav Jain"
+      <img src="/me.png" alt="Abhinav Jain"
         className="hero-img w-40 h-40 md:w-60 md:h-60 rounded-full border-4 border-white/20 shadow-lg hover:scale-105 transition-transform"
       />
     </div>
