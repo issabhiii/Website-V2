@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abhinav Jain | Tech Portfolio</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Raleway:wght@300;500;700&display=swap');
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background-color: #111827;
+      color: #f3f4f6;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glass-effect {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .skill-tile:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.25);
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, #6366f1, #8b5cf6);
+    }
+
+    .project-card:hover .project-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hero background image + dark overlay */
+    #hero {
+      position: relative;
+      background: url('background.jpg') center center / cover no-repeat fixed;
+    }
+
+    #hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.6);
+      z-index: 0;
+    }
+
+    .hero-img-wrapper {
+      position: sticky;
+      top: 20%;
+      display: flex;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .hero-img {
+      width: 240px;
+      height: 240px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .hero-img:hover { transform: scale(1.05); }
+
+    #hero .container { z-index: 1; position: relative; }
+
+    @media (max-width: 768px) {
+      .hero-img-wrapper {
+        position: relative;
+        top: 0;
+        margin-bottom: 1.5rem;
+      }
+      #hero h1 {
+        font-size: 2.5rem;
+        line-height: 1.2;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Navigation -->
+  <nav class="fixed w-full z-50 glass-effect py-4 px-6">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="#" class="text-2xl font-bold gradient-text">Abhinav Jain|Dec 2027</a>
+      <div class="hidden md:flex space-x-8">
+        <a href="#hero" class="hover:text-purple-400 transition-colors">Home</a>
+        <a href="#about" class="hover:text-purple-400 transition-colors">About</a>
+        <a href="#experience" class="hover:text-purple-400 transition-colors">Experience</a>
+        <a href="#certifications" class="hover:text-purple-400 transition-colors">Certifications</a>
+      </div>
+      <div class="md:hidden">
+        <button id="menu-btn" class="text-gray-100">
+          <i data-feather="menu"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero" class="min-h-screen flex flex-col md:flex-row items-center justify-center relative overflow-hidden">
+    <div id="vanta-bg" class="absolute inset-0 z-0"></div>
+
+    <div class="hero-img-wrapper w-full md:w-1/2">
+      <img src="me.png" alt="Abhinav Jain" class="hero-img">
+    </div>
+
+    <div class="container mx-auto px-6 md:w-1/2 text-center md:text-left mt-10 md:mt-0" data-aos="fade-up">
+      <h1 class="text-5xl md:text-7xl font-bold mb-4">
+        Hello, I'm <span class="gradient-text">Abhinav Jain</span>
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 text-gray-300">
+        Computer Science Major & Full Stack Developer
+      </p>
+
+      <!-- Buttons -->
+      <div class="flex justify-center md:justify-start space-x-4 mb-6">
+        <a href="#about" class="px-8 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">Explore My Work</a>
+        <a href="mailto:abhinav.jain.0461@gmail.com" class="px-8 py-3 border border-purple-600 hover:bg-purple-600 rounded-lg transition-colors">Get In Touch</a>
+      </div>
+
+      <!-- Social Buttons -->
+      <div class="flex justify-center md:justify-start space-x-6 mt-4">
+        <a href="https://www.linkedin.com/in/abhinav-jain-9881b8296/" target="_blank"
+           class="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all">
+          <i data-feather="linkedin" class="w-5 h-5 text-purple-400 hover:text-white"></i>
+        </a>
+        <a href="https://github.com/issabhiii" target="_blank"
+           class="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all">
+          <i data-feather="github" class="w-5 h-5 text-purple-400 hover:text-white"></i>
+        </a>
+        <a href="mailto:abhinav.jain.0461@gmail.com"
+           class="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all">
+          <i data-feather="mail" class="w-5 h-5 text-purple-400 hover:text-white"></i>
+        </a>
+      </div>
+
+      <!-- Resume Button -->
+      <div class="mt-6 flex justify-center md:justify-start">
+        <a href="abhinav_jain_resume.pdf" download
+           class="w-full md:w-2/3 lg:w-1/2 px-6 py-3 border-2 border-purple-400 text-purple-400 font-semibold text-center rounded-full hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all">
+          Download Resume
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- About Section -->
+  <section id="about" class="py-20 bg-gray-800">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">Skills & Expertise</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="skill-tile glass-effect p-8 rounded-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+          <div class="text-center mb-6">
+            <i data-feather="layout" class="w-12 h-12 text-purple-400 mx-auto"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-4 text-center">Frontend Development</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> React.js & Next.js</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Flutter SDK</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Tailwind CSS & SASS</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> TypeScript</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> UI/UX Design</li>
+          </ul>
+        </div>
+
+        <div class="skill-tile glass-effect p-8 rounded-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+          <div class="text-center mb-6">
+            <i data-feather="server" class="w-12 h-12 text-purple-400 mx-auto"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-4 text-center">Backend Development</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Node.js & Express</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Python & Django</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> PostgreSQL & Supabase</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Hive & isar </li>
+          </ul>
+        </div>
+
+        <div class="skill-tile glass-effect p-8 rounded-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+          <div class="text-center mb-6">
+            <i data-feather="cpu" class="w-12 h-12 text-purple-400 mx-auto"></i>
+          </div>
+          <h3 class="text-2xl font-bold mb-4 text-center">Other Expertise</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Machine Learning</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Data Structures</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Algorithms</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Complete App Planning and Development</li>
+            <li class="flex items-center"><i data-feather="check" class="w-4 h-4 text-green-400 mr-2"></i> Leadership</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+   <!-- Experience Section -->
+  <section id="experience" class="py-20 bg-gray-900">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">Professional Journey</h2>
+      <div class="max-w-4xl mx-auto relative space-y-12">
+
+        <!-- App Developer -->
+        <div class="ml-8 timeline-item relative glass-effect p-6 rounded-xl" data-aos="fade-right">
+          <span class="text-sm text-purple-400">May 2025 – Present</span>
+          <h3 class="text-xl font-bold mb-2">App Developer – <span class="italic">Bhasha</span></h3>
+          <ul class="list-disc list-inside text-gray-300 space-y-2">
+            <li>Initiated the development of an innovative learning platform dedicated to preserving and revitalizing underrepresented languages of the Indian subcontinent.</li>
+            <li>Fully developed the company website with a React-based framework, implementing server-side rendering and using Supabase for backend services.</li>
+            <li>Currently leveraging Flutter and Dart to build a cross-platform learning experience, with future plans to integrate AI-powered chatbots to personalize language learning.</li>
+          </ul>
+        </div>
+
+        <!-- Front Desk Assistant -->
+        <div class="ml-8 timeline-item relative glass-effect p-6 rounded-xl" data-aos="fade-left">
+          <span class="text-sm text-purple-400">Jan 2025 – May 2025</span>
+          <h3 class="text-xl font-bold mb-2">Front Desk Office Assistant – <span class="italic">UMN Twin Cities Residence Halls</span></h3>
+          <ul class="list-disc list-inside text-gray-300 space-y-2">
+            <li>Worked the front desk at the University of Minnesota residence halls, ensuring smooth operations and student satisfaction.</li>
+            <li>Provided around-the-clock customer service to residents, guests, and university staff by responding to inquiries, resolving concerns, and fostering a welcoming community.</li>
+            <li>Enforced university housing policies with professionalism, reported incidents, and ensured safety protocols were followed.</li>
+            <li>Managed key inventories, mail distribution, and secure handling of packages.</li>
+            <li>Supported administrative tasks including data entry, room lockouts, incident documentation, and coordination with Resident Advisors and campus security.</li>
+          </ul>
+        </div>
+
+        <!-- Upcoming -->
+        <div class="ml-8 timeline-item relative glass-effect p-6 rounded-xl" data-aos="fade-up">
+          <h3 class="text-2xl font-bold mb-4 gradient-text">Upcoming</h3>
+          <p class="text-gray-300 mb-3">
+            🎯 Officially stepping in as <strong>Head of Website & Communications</strong> for the Wisconsin Robotics team. Leading a full redesign of the team’s digital presence, building a responsive website and streamlining communication channels for team members and sponsors.
+          </p>
+          <p class="text-gray-300">
+            🎶 Building a dedicated student portal for <strong>Cadenza School of Musica</strong> — complete with scheduling, payments, and teacher-student communication — to bring a seamless, modern experience to music education management.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+<section id="contact" class="min-h-screen flex flex-col md:flex-row items-center justify-center px-4 md:px-12 py-16 space-y-8 md:space-y-0 md:space-x-12 relative overflow-hidden bg-[#111827]">
+  
+  <!-- Left: Spline Animation (Scaled Down) -->
+  <div class="w-full md:w-1/2 flex items-center justify-center">
+    <div class="relative w-full" style="transform: scale(1); transform-origin: center;">
+      <iframe 
+        src="https://my.spline.design/particleaibrain-F8MDOwDO24zpIUGj0AaI4vny/"
+        frameborder="0"
+        loading="lazy"
+        class="w-full aspect-[4/3] md:aspect-[16/9]"
+        style="background: transparent; pointer-events: auto;">
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Right: Contact Form -->
+  <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-12 w-full md:w-1/2 shadow-2xl" data-aos="zoom-in" data-aos-duration="800">
+    <h1 class="text-3xl md:text-4xl font-bold text-center md:text-left text-white mb-2">Get In Touch</h1>
+    <p class="text-center md:text-left text-gray-300 mb-10">We'd love to hear from you</p>
+
+    <form id="contactForm" class="space-y-6">
+      <!-- Name -->
+      <div class="relative">
+        <input type="text" id="name" required autocomplete="off"
+          class="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500">
+        <label for="name" class="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+          Your Name <span class="text-red-400">*</span>
+        </label>
+      </div>
+
+      <!-- Email -->
+      <div class="relative">
+        <input type="email" id="email" required autocomplete="off"
+          class="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500">
+        <label for="email" class="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+          Email Address <span class="text-red-400">*</span>
+        </label>
+      </div>
+
+      <!-- Phone -->
+      <div class="relative">
+        <input type="tel" id="phone" autocomplete="off"
+          class="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500">
+        <label for="phone" class="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+          Phone Number (Optional)
+        </label>
+      </div>
+
+      <!-- Company -->
+      <div class="relative">
+        <input type="text" id="company" autocomplete="off"
+          class="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500">
+        <label for="company" class="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+          Company Name (Optional)
+        </label>
+      </div>
+
+      <!-- Feedback -->
+      <div class="relative">
+        <textarea id="feedback" rows="4"
+          class="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
+        <label for="feedback" class="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+          Feedback (Optional)
+        </label>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit"
+        class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-full transition-all duration-300 flex items-center justify-center">
+        <i data-feather="send" class="w-5 h-5 mr-2"></i> Send Message
+      </button>
+    </form>
+
+    <!-- Success Message -->
+    <div class="mt-8 text-center text-green-400 opacity-0 transition-opacity duration-300" id="success-message">
+      <i data-feather="check-circle" class="w-8 h-8 mx-auto mb-2"></i>
+      <p>Thank you! Your message has been sent successfully.</p>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 py-12 border-t border-gray-800">
+    <div class="container mx-auto px-6 text-center">
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="https://github.com/issabhiii" target="_blank" class="text-gray-400 hover:text-purple-400 transition-colors">
+          <i data-feather="github" class="w-6 h-6"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/abhinav-jain-9881b8296/" target="_blank" class="text-gray-400 hover:text-purple-400 transition-colors">
+          <i data-feather="linkedin" class="w-6 h-6"></i>
+        </a>
+        <a href="mailto:abhinav.jain.0461@gmail.com" class="text-gray-400 hover:text-purple-400 transition-colors">
+          <i data-feather="mail" class="w-6 h-6"></i>
+        </a>
+      </div>
+      <p class="text-gray-400">&copy; 2024 Abhinav Jain. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    VANTA.GLOBE({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x6366f1,
+      backgroundColor: 0x111827
+    });
+
+    feather.replace();
+
+    document.getElementById('menu-btn').addEventListener('click', function () {
+      const nav = document.querySelector('nav div:nth-child(2)');
+      nav.classList.toggle('hidden');
+    });
+  </script>
+  <script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+  const supabase = createClient("https://yaijmwhijxpjyifvsvlc.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhaWptd2hpanhwanlpZnZzdmxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwOTA0MDUsImV4cCI6MjA3MzY2NjQwNX0.TI8gQUpK6vaXdWDri3P63pNJ286gGgQcqI5Rblfkoos");
+
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const company = document.getElementById('company').value.trim();
+    const feedback = document.getElementById('feedback').value.trim();
+
+    const { data, error } = await supabase
+      .from('contact_submissions')
+      .insert([{ name, email, phone, company, feedback }]);
+
+    if (error) {
+      alert("Something went wrong: " + error.message);
+    } else {
+      document.getElementById('contactForm').reset();
+      document.getElementById('success-message').classList.remove('opacity-0');
+      document.getElementById('success-message').classList.add('opacity-100');
+    }
+  });
+</script>
+
+</body>
+</html>
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  hehehehehehehehehhhehehehhehehehhehehe -->
