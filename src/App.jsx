@@ -4,6 +4,7 @@ import ShinyText from './components/ShinyText'
 import GradientText from './components/GradientText'
 import DecryptedText from './components/DecryptedText'
 import ClickSpark from './components/ClickSpark'
+import LiquidEther from './components/LiquidEther';
 import './App.css'
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
   }, []);
 
   return (
+   <div className="relative z-[9999]">
     <ClickSpark
       sparkColor='#fff'
       sparkSize={10}
@@ -105,20 +107,26 @@ function App() {
   id="hero"
   className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-6"
 >
-  {/* Dot Grid Background */}
-  <div className="absolute inset-0 z-0">
-    <DotGrid
-      dotSize={8}
-      gap={20}
-      baseColor="#1e1b4b"   // deep indigo, subtle on dark bg
-      activeColor="#8b5cf6" // nice pop on hover
-      proximity={120}
-      shockRadius={250}
-      shockStrength={5}
-      resistance={750}
-      returnDuration={1.5}
-    />
-  </div>
+  <div className="absolute inset-0">
+  <LiquidEther
+    colors={[ '#5227FF', '#FF9FFC', '#B19EEF' ]}
+    mouseForce={20}
+    cursorSize={100}
+    isViscous={false}
+    viscous={30}
+    iterationsViscous={20}
+    iterationsPoisson={20}
+    resolution={0.5}
+    isBounce={false}
+    autoDemo={true}
+    autoSpeed={0.5}
+    autoIntensity={2.2}
+    takeoverDuration={0.25}
+    autoResumeDelay={3000}
+    autoRampDuration={0.6}
+  />
+</div>
+
 
   {/* Hero Content Container */}
   <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center">
@@ -208,7 +216,7 @@ function App() {
 
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gray-800">
+      <section id="about" className="relative z10 py-20 bg-gray-800">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16" data-aos="fade-up">
             <DecryptedText 
@@ -297,7 +305,20 @@ function App() {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="py-20 bg-gray-900">
+      <section id="experience" className="relative py-20 bg-gray-900">
+      <div className="absolute inset-0 z-0">
+            <DotGrid
+              dotSize={8}
+              gap={20}
+              baseColor="#1e1b4b"
+              activeColor="#8b5cf6"
+              proximity={120}
+              shockRadius={369}
+              shockStrength={6.9}
+              resistance={469}
+              returnDuration={1.69}
+            />
+          </div>
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16" data-aos="fade-up">Professional Journey</h2>
           <div className="max-w-4xl mx-auto relative space-y-12">
@@ -442,6 +463,7 @@ function App() {
       </footer>
       </div>
     </ClickSpark>
+    </div>
   )
 }
 
