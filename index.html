@@ -5,19 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Abhinav Jain | Tech Portfolio</title>
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+
+    <!-- Pre-hydration background to prevent flash -->
+    <style>
+      html,
+      body {
+        background-color: #111827; /* Same as Tailwind bg-gray-900 */
+        color: white;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Fade-in animation */
+      body.fade-in {
+        opacity: 0;
+        animation: fadeIn 0.6s ease-in-out forwards;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
 
-    <!-- ✅ Use your entry CSS (Vite will handle this) -->
-    <link rel="stylesheet" href="./src/index.css" />
+    <!-- Your main CSS (handled by Vite) -->
+    <link rel="stylesheet" href="/src/index.css" />
   </head>
-  <body class="min-h-screen">
+  <body class="min-h-screen fade-in">
     <div id="root"></div>
 
-    <!-- ✅ Use your entry JS (Vite will handle this) -->
-    <script type="module" src="./src/main.jsx"></script>
+    <!-- Your entry JS (handled by Vite) -->
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

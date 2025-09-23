@@ -1,106 +1,171 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import DotGrid from './components/DotGrid'
 import ShinyText from './components/ShinyText'
 import GradientText from './components/GradientText'
 import DecryptedText from './components/DecryptedText'
 import ClickSpark from './components/ClickSpark'
 import LiquidEther from './components/LiquidEther';
+import LetterGlitch from './components/LetterGlitch';
 import './App.css'
+import GlassSurface from './components/GlassSurface';
+import './components/GlassSurface.css';
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  "https://yaijmwhijxpjyifvsvlc.supabase.co", // your URL
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhaWptd2hpanhwanlpZnZzdmxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwOTA0MDUsImV4cCI6MjA3MzY2NjQwNX0.TI8gQUpK6vaXdWDri3P63pNJ286gGgQcqI5Rblfkoos" // anon key
+);
+
+
 
 function App() {
   const [nameText, setNameText] = useState("Hello, I'm Abhinav Jain");
+  const [isOpen, setIsOpen] = useState(false);
+  const navRef = useRef(null);
+// Inside your App component, add these states at the top:
+const [loading, setLoading] = useState(false);
+const [success, setSuccess] = useState(false);
+
+// Add this useEffect so feather icons refresh when success overlay shows
+useEffect(() => {
+  if (window.feather) window.feather.replace();
+}, [success]);
 
   const handleNameClick = () => {
-    setNameText(nameText === "Hello, I'm Abhinav Jain" ? "you can call me Abhi" : "Hello, I'm Abhinav Jain");
+    setNameText(
+      nameText === "Hello, I'm Abhinav Jain"
+        ? "you can call me Abhi"
+        : "Hello, I'm Abhinav Jain"
+    );
   };
 
+  // Close menu on outside click
   useEffect(() => {
-    // Initialize AOS
-    if (window.AOS) {
-      window.AOS.init({ duration: 800, once: true });
+    function handleClickOutside(e) {
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
     }
+    if (isOpen) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
 
-    // Initialize Vanta Globe
+  useEffect(() => {
+    if (window.AOS) window.AOS.init({ duration: 800, once: true });
+
     if (window.VANTA) {
       window.VANTA.GLOBE({
         el: "#vanta-bg",
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
         color: 0x6366f1,
-        backgroundColor: 0x111827
+        backgroundColor: 0x111827,
       });
     }
 
-    // Initialize Feather icons
-    if (window.feather) {
-      window.feather.replace();
-    }
-
-    // Mobile menu toggle
-    const menuBtn = document.getElementById('menu-btn');
-    if (menuBtn) {
-      menuBtn.addEventListener('click', function () {
-        const nav = document.querySelector('nav div:nth-child(2)');
-        if (nav) nav.classList.toggle('hidden');
-      });
-    }
-
-    // Contact form submission
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-      contactForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const company = document.getElementById('company').value.trim();
-        const feedback = document.getElementById('feedback').value.trim();
-
-        // For now, just show success message
-        // In a real app, you'd send this to your backend
-        document.getElementById('contactForm').reset();
-        const successMessage = document.getElementById('success-message');
-        if (successMessage) {
-          successMessage.classList.remove('opacity-0');
-          successMessage.classList.add('opacity-100');
-        }
-      });
-    }
+    if (window.feather) window.feather.replace();
   }, []);
 
   return (
-   <div className="relative z-[9999]">
-    <ClickSpark
-      sparkColor='#fff'
-      sparkSize={10}
-      sparkRadius={15}
-      sparkCount={8}
-      duration={400}
-    >
-      <div className="min-h-screen">
-        {/* Navigation */}
-      <nav className="fixed w-full z-50 glass-effect py-4 px-6">
-        <div className="container mx-auto flex justify-between items-center">
-          <a href="#" className="text-2xl font-bold gradient-text">Abhinav Jain|Dec 2027</a>
-          <div className="hidden md:flex space-x-8">
-            <a href="#hero" className="hover:text-purple-400 transition-colors">Home</a>
-            <a href="#about" className="hover:text-purple-400 transition-colors">About</a>
-            <a href="#experience" className="hover:text-purple-400 transition-colors">Experience</a>
-            <a href="#contact" className="hover:text-purple-400 transition-colors">Contact</a>
+    <div className="relative z-[9999]">
+      <ClickSpark
+        sparkColor="#fff"
+        sparkSize={10}
+        sparkRadius={15}
+        sparkCount={8}
+        duration={400}
+      >
+        <div className="min-h-screen">
+          {/* Backdrop for mobile */}
+          {isOpen && (
+            <div
+              className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm md:hidden"
+              onClick={() => setIsOpen(false)}
+            />
+          )}
+
+          {/* Navigation */}
+          <div className="fixed w-full z-50 flex justify-center pt-4">
+            <GlassSurface
+              ref={navRef}
+              width="80%"
+              height={isOpen ? 240 : 72}
+              borderRadius={50}
+              displace={10}
+              distortionScale={250}
+              brightness={85}
+              opacity={0.1}
+              blur={18}
+              className="flex flex-col px-6 md:px-12 border border-white/30 shadow-[0_0_25px_rgba(255,255,255,0.15)] w-[80%] md:w-[69%] transition-all duration-300"
+              style={{
+                boxShadow:
+                  "0 0 15px rgba(255,255,255,0.3), 0 0 30px rgba(255,255,255,0.1) inset",
+                border: "1px solid rgba(255,255,255,0.4)",
+              }}
+            >
+              {/* Top Row */}
+              <div className="flex justify-between items-center w-full">
+                <a
+                  href="https://www.linkedin.com/in/abhinav-jain-9881b8296/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xl md:text-2xl font-bold gradient-text whitespace-nowrap hover:scale-105 transition-transform"
+                >
+                  Abhinav Jain | Dec 2027
+                </a>
+
+                {/* Desktop Links + Mobile Button */}
+                <div className="flex items-center space-x-6">
+                  <div className="hidden md:flex space-x-10">
+                    <a href="#hero" className="hover:text-purple-400 transition-colors">
+                      Home
+                    </a>
+                    <a href="#about" className="hover:text-purple-400 transition-colors">
+                      About
+                    </a>
+                    <a href="#experience" className="hover:text-purple-400 transition-colors">
+                      Experience
+                    </a>
+                    <a href="#contact" className="hover:text-purple-400 transition-colors">
+                      Contact
+                    </a>
+                  </div>
+
+                  {/* Mobile Hamburger / Close Icon */}
+                  <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="md:hidden text-gray-100 pointer-events-auto focus:outline-none"
+                  >
+                    {isOpen ? (
+                      <i data-feather="x" className="w-6 h-6"></i>
+                    ) : (
+                      <i data-feather="menu" className="w-6 h-6"></i>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Mobile Menu */}
+              <div
+                className={`md:hidden flex flex-col items-start space-y-4 mt-4 overflow-hidden transition-all duration-300 ${
+                  isOpen
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-4 pointer-events-none"
+                }`}
+              >
+                <a href="#hero" onClick={() => setIsOpen(false)}>Home</a>
+                <a href="#about" onClick={() => setIsOpen(false)}>About</a>
+                <a href="#experience" onClick={() => setIsOpen(false)}>Experience</a>
+                <a href="#contact" onClick={() => setIsOpen(false)}>Contact</a>
+              </div>
+            </GlassSurface>
           </div>
-          <div className="md:hidden">
-            <button id="menu-btn" className="text-gray-100">
-              <i data-feather="menu"></i>
-            </button>
-          </div>
-        </div>
-      </nav>
+
 
      {/* Hero Section */}
 <section
@@ -178,131 +243,181 @@ function App() {
     </div>
 
     {/* Social Buttons */}
-    <div className="flex justify-center space-x-6 mt-4">
-      <a
-        href="https://www.linkedin.com/in/abhinav-jain-9881b8296/"
-        target="_blank"
-        className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
-      >
-        <i data-feather="linkedin" className="w-5 h-5 text-purple-400 hover:text-white"></i>
-      </a>
-      <a
-        href="https://github.com/issabhiii"
-        target="_blank"
-        className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
-      >
-        <i data-feather="github" className="w-5 h-5 text-purple-400 hover:text-white"></i>
-      </a>
-      <a
-        href="mailto:abhinav.jain.0461@gmail.com"
-        className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
-      >
-        <i data-feather="mail" className="w-5 h-5 text-purple-400 hover:text-white"></i>
-      </a>
-    </div>
+   
+<div className="flex justify-center space-x-6 mt-4">
+  <a
+    href="https://www.linkedin.com/in/abhinav-jain-9881b8296/"
+    target="_blank"
+    className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
+  >
+    <i data-feather="linkedin" className="w-5 h-5 text-purple-400 hover:text-white"></i>
+  </a>
+
+  <a
+    href="https://github.com/issabhiii"
+    target="_blank"
+    className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
+  >
+    <i data-feather="github" className="w-5 h-5 text-purple-400 hover:text-white"></i>
+  </a>
+
+  {/* Email Copy Button */}
+  {/* Email Button */}
+<button
+  onClick={(e) => {
+    // 1. Copy email to clipboard
+    const email = "abhinav.jain.0461@gmail.com";
+    navigator.clipboard.writeText(email);
+
+    // 2. Open default email app
+    window.location.href = `mailto:${email}`;
+
+
+
+
+  }}
+  className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
+>
+  <i data-feather="mail" className="w-5 h-5 text-purple-400 hover:text-white"></i>
+</button>
+</div>
+
+
 
     {/* Resume Button */}
-    <div className="mt-6 flex justify-center">
-      <a
-        href="/abhinav_jain_resume.pdf"
-        download
-        className="px-8 py-3 border-2 border-purple-400 text-purple-400 font-semibold text-center rounded-full hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all"
-      >
-        <ShinyText text="Download Resume" speed={5} />
-      </a>
+<div className="mt-6 flex justify-center">
+  <a
+    href="/Abhinav Jain-Resume.pdf"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="px-8 py-3 border-2 border-purple-400 text-purple-400 font-semibold text-center rounded-full hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all"
+  >
+    <ShinyText text="View Resume" speed={5} />
+  </a>
+</div>
+
+  </div>
+</section>
+
+{/* About Section */}
+<section id="about" className="relative z10 py-20 bg-gray-800">
+  <div className="container mx-auto px-6">
+    <h2 className="text-4xl font-bold text-center mb-16" data-aos="fade-up">
+      <DecryptedText 
+        text="Skills & Expertise" 
+        animateOn="view"
+        speed={80}
+        maxIterations={15}
+        revealDirection="center"
+        className="text-4xl font-bold text-center text-white"
+        encryptedClassName="text-4xl font-bold text-center text-purple-300"
+      />
+    </h2>
+
+    <div className="grid md:grid-cols-3 gap-8">
+
+      {/* Tile 1 */}
+      <div className="relative skill-tile glass-effect p-8 rounded-xl transition-all duration-300 overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+        {/* Background should not expand container */}
+        <div className="absolute inset-0 z-0">
+          <LetterGlitch
+            glitchSpeed={50}
+            className="w-full h-full opacity-30"
+            centerVignette={true}
+            outerVignette={false}
+            smooth={true}
+          />
+        </div>
+
+        {/* Foreground */}
+        <div className="relative z-10">
+          <div className="text-center mb-6">
+            <i data-feather="layout" className="w-12 h-12 text-purple-400 mx-auto"></i>
+          </div>
+          <h3 className="text-2xl font-bold mb-4 text-center">
+            <DecryptedText 
+              text="Frontend Development" 
+              animateOn="view"
+              speed={60}
+              maxIterations={12}
+              revealDirection="start"
+              className="text-2xl font-bold text-center text-white"
+              encryptedClassName="text-2xl font-bold text-center text-purple-200"
+            />
+          </h3>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> React.js & Next.js</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Flutter SDK</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Tailwind CSS & SASS</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> TypeScript</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> UI/UX Design</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Repeat same pattern for other two tiles */}
+      {/* Backend Development */}
+      <div className="relative skill-tile glass-effect p-8 rounded-xl transition-all duration-300 overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+        <div className="absolute inset-0 z-0">
+          <LetterGlitch
+            glitchSpeed={50}
+            className="w-full h-full opacity-30"
+            centerVignette={true}
+            outerVignette={false}
+            smooth={true}
+          />
+        </div>
+
+        <div className="relative z-10">
+          <div className="text-center mb-6">
+            <i data-feather="server" className="w-12 h-12 text-purple-400 mx-auto"></i>
+          </div>
+          <h3 className="text-2xl font-bold mb-4 text-center">
+            <DecryptedText text="Backend Development" animateOn="view" speed={60} maxIterations={12} revealDirection="start" className="text-2xl font-bold text-center text-white" encryptedClassName="text-2xl font-bold text-center text-purple-200"/>
+          </h3>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Node.js & Express</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Python & Django</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> PostgreSQL & Supabase</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Hive & Isar</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Other Expertise */}
+      <div className="relative skill-tile glass-effect p-8 rounded-xl transition-all duration-300 overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+        <div className="absolute inset-0 z-0">
+          <LetterGlitch
+            glitchSpeed={50}
+            className="w-full h-full opacity-30"
+            centerVignette={true}
+            outerVignette={false}
+            smooth={true}
+          />
+        </div>
+
+        <div className="relative z-10">
+          <div className="text-center mb-6">
+            <i data-feather="cpu" className="w-12 h-12 text-purple-400 mx-auto"></i>
+          </div>
+          <h3 className="text-2xl font-bold mb-4 text-center">
+            <DecryptedText text="Other Expertise" animateOn="view" speed={60} maxIterations={12} revealDirection="start" className="text-2xl font-bold text-center text-white" encryptedClassName="text-2xl font-bold text-center text-purple-200"/>
+          </h3>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Machine Learning</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Data Structures</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Algorithms</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Complete App Planning and Development</li>
+            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Leadership</li>
+          </ul>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
 
-      {/* About Section */}
-      <section id="about" className="relative z10 py-20 bg-gray-800">
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16" data-aos="fade-up">
-            <DecryptedText 
-              text="Skills & Expertise" 
-              animateOn="view"
-              speed={80}
-              maxIterations={15}
-              revealDirection="center"
-              className="text-4xl font-bold text-center text-white"
-              encryptedClassName="text-4xl font-bold text-center text-purple-300"
-            />
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="skill-tile glass-effect p-8 rounded-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
-              <div className="text-center mb-6">
-                <i data-feather="layout" className="w-12 h-12 text-purple-400 mx-auto"></i>
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-center">
-                <DecryptedText 
-                  text="Frontend Development" 
-                  animateOn="view"
-                  speed={60}
-                  maxIterations={12}
-                  revealDirection="start"
-                  className="text-2xl font-bold text-center text-white"
-                  encryptedClassName="text-2xl font-bold text-center text-purple-200"
-                />
-              </h3>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> React.js & Next.js</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Flutter SDK</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Tailwind CSS & SASS</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> TypeScript</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> UI/UX Design</li>
-              </ul>
-            </div>
-
-            <div className="skill-tile glass-effect p-8 rounded-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
-              <div className="text-center mb-6">
-                <i data-feather="server" className="w-12 h-12 text-purple-400 mx-auto"></i>
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-center">
-                <DecryptedText 
-                  text="Backend Development" 
-                  animateOn="view"
-                  speed={60}
-                  maxIterations={12}
-                  revealDirection="start"
-                  className="text-2xl font-bold text-center text-white"
-                  encryptedClassName="text-2xl font-bold text-center text-purple-200"
-                />
-              </h3>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Node.js & Express</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Python & Django</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> PostgreSQL & Supabase</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Hive & isar </li>
-              </ul>
-            </div>
-
-            <div className="skill-tile glass-effect p-8 rounded-xl transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
-              <div className="text-center mb-6">
-                <i data-feather="cpu" className="w-12 h-12 text-purple-400 mx-auto"></i>
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-center">
-                <DecryptedText 
-                  text="Other Expertise" 
-                  animateOn="view"
-                  speed={60}
-                  maxIterations={12}
-                  revealDirection="start"
-                  className="text-2xl font-bold text-center text-white"
-                  encryptedClassName="text-2xl font-bold text-center text-purple-200"
-                />
-              </h3>
-              <ul className="space-y-2 text-gray-300">
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Machine Learning</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Data Structures</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Algorithms</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Complete App Planning and Development</li>
-                <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Leadership</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Experience Section */}
       <section id="experience" className="relative py-20 bg-gray-900">
@@ -383,7 +498,31 @@ function App() {
           <h1 className="text-3xl md:text-4xl font-bold text-center md:text-left text-white mb-2">Get In Touch</h1>
           <p className="text-center md:text-left text-gray-300 mb-10">We'd love to hear from you</p>
 
-          <form id="contactForm" className="space-y-6">
+          <form
+  id="contactForm"
+  className="space-y-6"
+  onSubmit={async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const company = document.getElementById("company").value.trim();
+    const feedback = document.getElementById("feedback").value.trim();
+
+    // Insert to Supabase
+    const { error } = await supabase.from("contact_submissions").insert([
+      { name, email, phone, company, feedback },
+    ]);
+
+    if (error) {
+      alert("Error: " + error.message);
+    } else {
+      alert("✅ Message sent successfully!");
+      e.target.reset();
+    }
+  }}
+>
+
             {/* Name */}
             <div className="relative">
               <input type="text" id="name" required autoComplete="off"
@@ -443,6 +582,7 @@ function App() {
           </div>
         </div>
       </section>
+      
 
       {/* Footer */}
       <footer className="bg-gray-900 py-12 border-t border-gray-800">
