@@ -63,32 +63,6 @@ npm run dev
 
 Vite will display the local development URL in your terminal.
 
-## Available Scripts
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Build the site for production:
-
-```bash
-npm run build
-```
-
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
-Run ESLint:
-
-```bash
-npm run lint
-```
-
 ## Project Structure
 
 ```text
@@ -101,32 +75,11 @@ src/
 └── main.jsx            # React entry point
 ```
 
-## Design
-
-The portfolio uses an interactive card-based interface built around my engineering work rather than reproducing my résumé directly.
-
-The design focuses on:
-
-- Clear visual hierarchy
-- Minimal navigation
-- Responsive layouts
-- Smooth, purposeful motion
-- Interactive experience and project exploration
-- Technical depth through metrics, architecture, demos, and implementation details
-
-## Experience
-
-Professional experience is presented through an interactive timeline.
-
-On desktop, experiences can expand into detailed views containing project context, technical decisions, metrics, architecture, screenshots, and demos.
-
-On smaller screens, the interface adapts to compact timeline cards with mobile-friendly expanded views.
-
 ## Projects
 
 Projects include developer tooling, browser security, AI systems, and infrastructure work.
 
-Each project can include:
+Each project includes:
 
 - Technical overview
 - Architecture and implementation details
@@ -135,14 +88,6 @@ Each project can include:
 - Engineering challenges
 - Metrics and outcomes
 - Source code or project links where available
-
-## Responsive Design
-
-The interface adapts across device sizes:
-
-- **Desktop** — Timeline layouts, project grids, and expanded detail panels
-- **Tablet** — Compact cards with overlay-based detail views
-- **Mobile** — Vertical timelines and tap-to-expand project experiences
 
 ## Development
 
