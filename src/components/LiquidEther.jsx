@@ -87,7 +87,11 @@ export default function LiquidEther({
         this.container = container;
         this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
         this.resize();
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer = new THREE.WebGLRenderer({
+          antialias: true,
+          alpha: true,
+          preserveDrawingBuffer: true
+        });
         this.renderer.autoClear = false;
         this.renderer.setClearColor(new THREE.Color(0x000000), 0);
         this.renderer.setPixelRatio(this.pixelRatio);
@@ -100,11 +104,16 @@ export default function LiquidEther({
       }
       resize() {
         if (!this.container) return;
-        const rect = this.container.getBoundingClientRect();
-        this.width = Math.max(1, Math.floor(rect.width));
-        this.height = Math.max(1, Math.floor(rect.height));
+        this.width = Math.max(1, this.container.clientWidth || Math.floor(this.container.getBoundingClientRect().width));
+        this.height = Math.max(1, this.container.clientHeight || Math.floor(this.container.getBoundingClientRect().height));
         this.aspect = this.width / this.height;
-        if (this.renderer) this.renderer.setSize(this.width, this.height, false);
+        if (this.renderer) {
+          this.renderer.setSize(this.width, this.height, false);
+          const el = this.renderer.domElement;
+          el.style.width = '100%';
+          el.style.height = '100%';
+          el.style.display = 'block';
+        }
       }
       update() {
         this.delta = this.clock.getDelta();
@@ -140,21 +149,23 @@ export default function LiquidEther({
       }
       init(container) {
         this.container = container;
-        container.addEventListener('mousemove', this._onMouseMove, false);
-        container.addEventListener('touchstart', this._onTouchStart, false);
-        container.addEventListener('touchmove', this._onTouchMove, false);
-        container.addEventListener('mouseenter', this._onMouseEnter, false);
-        container.addEventListener('mouseleave', this._onMouseLeave, false);
-        container.addEventListener('touchend', this._onTouchEnd, false);
+        this.pointerRoot = container.closest('#hero') || container.parentElement || container;
+        this.pointerRoot.addEventListener('mousemove', this._onMouseMove, false);
+        this.pointerRoot.addEventListener('touchstart', this._onTouchStart, false);
+        this.pointerRoot.addEventListener('touchmove', this._onTouchMove, false);
+        this.pointerRoot.addEventListener('mouseenter', this._onMouseEnter, false);
+        this.pointerRoot.addEventListener('mouseleave', this._onMouseLeave, false);
+        this.pointerRoot.addEventListener('touchend', this._onTouchEnd, false);
       }
       dispose() {
-        if (!this.container) return;
-        this.container.removeEventListener('mousemove', this._onMouseMove, false);
-        this.container.removeEventListener('touchstart', this._onTouchStart, false);
-        this.container.removeEventListener('touchmove', this._onTouchMove, false);
-        this.container.removeEventListener('mouseenter', this._onMouseEnter, false);
-        this.container.removeEventListener('mouseleave', this._onMouseLeave, false);
-        this.container.removeEventListener('touchend', this._onTouchEnd, false);
+        const root = this.pointerRoot || this.container;
+        if (!root) return;
+        root.removeEventListener('mousemove', this._onMouseMove, false);
+        root.removeEventListener('touchstart', this._onTouchStart, false);
+        root.removeEventListener('touchmove', this._onTouchMove, false);
+        root.removeEventListener('mouseenter', this._onMouseEnter, false);
+        root.removeEventListener('mouseleave', this._onMouseLeave, false);
+        root.removeEventListener('touchend', this._onTouchEnd, false);
       }
       setCoords(x, y) {
         if (!this.container) return;
@@ -1020,6 +1031,11 @@ export default function LiquidEther({
 
     webgl.start();
 
+    const kickResize = () => webglRef.current?.resize();
+    requestAnimationFrame(() => requestAnimationFrame(kickResize));
+    const resizeT1 = setTimeout(kickResize, 50);
+    const resizeT2 = setTimeout(kickResize, 350);
+
     // IntersectionObserver to pause rendering when not visible
     const io = new IntersectionObserver(
       entries => {
@@ -1050,6 +1066,8 @@ export default function LiquidEther({
     resizeObserverRef.current = ro;
 
     return () => {
+      clearTimeout(resizeT1);
+      clearTimeout(resizeT2);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (resizeObserverRef.current) {
         try {

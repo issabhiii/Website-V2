@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-telemetry-url="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>data · 7760</title>
+  <link rel="stylesheet" href="/data/styles.css">
+</head>
+<body>
+  <a class="skip" href="#cards">Skip to metrics</a>
+  <header class="top">
+    <div>
+      <p class="eyebrow">7760 · outbound telemetry</p>
+      <h1>data</h1>
+    </div>
+    <p class="pledge">This page reads a cached public snapshot. The machine has no public port.</p>
+  </header>
+
+  <main id="cards" class="grid">
+    <article class="card span-2" id="card-status" data-tone="idle">
+      <h2>System status</h2>
+      <p class="status-word" id="status-word">waiting</p>
+      <dl class="facts">
+        <div><dt>Last sample</dt><dd id="status-age">—</dd></div>
+        <div><dt>Refresh</dt><dd>2.5s</dd></div>
+        <div><dt>Retention</dt><dd>browser only · 90 samples</dd></div>
+      </dl>
+    </article>
+
+    <article class="card" id="card-cpu">
+      <h2>CPU</h2>
+      <p class="metric"><span data-count="cpu.usage">—</span><abbr>%</abbr></p>
+      <p class="sub"><span data-count="cpu.temp">—</span>°C package</p>
+      <svg class="spark" id="spark-cpu" viewBox="0 0 280 72" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </article>
+
+    <article class="card" id="card-gpu">
+      <h2>GPU</h2>
+      <p class="metric"><span data-count="gpu.usage">—</span><abbr>%</abbr></p>
+      <p class="sub"><span data-count="gpu.temp">—</span>°C · <span data-count="gpu.vramUsedMB">—</span> / <span data-int="gpu.vramTotalMB">—</span> MB</p>
+      <svg class="spark" id="spark-gpu" viewBox="0 0 280 72" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </article>
+
+    <article class="card" id="card-memory">
+      <h2>Memory</h2>
+      <p class="metric"><span data-count="memory.percent">—</span><abbr>%</abbr></p>
+      <p class="sub"><span data-count="memory.usedGB">—</span> / <span data-count="memory.totalGB">—</span> GB</p>
+      <svg class="spark" id="spark-mem" viewBox="0 0 280 72" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </article>
+
+    <article class="card" id="card-network">
+      <h2>Network</h2>
+      <p class="metric"><span data-count="network.rxMbps">—</span><abbr>Mb/s rx</abbr></p>
+      <p class="sub"><span data-count="network.txMbps">—</span> Mb/s tx</p>
+      <svg class="spark" id="spark-net" viewBox="0 0 280 72" preserveAspectRatio="none" aria-hidden="true"></svg>
+    </article>
+
+    <article class="card span-2" id="card-uptime">
+      <h2>Uptime</h2>
+      <p class="metric metric-wide" id="uptime-text">—</p>
+      <p class="sub" id="uptime-seconds">no snapshot yet</p>
+    </article>
+  </main>
+
+  <footer>
+    <p>v1 snapshot · no hostname, addresses, processes, or logs.</p>
+  </footer>
+  <script src="/data/app.js"></script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { fitCanvasBuffer, observeBox } from '../lib/fitCanvas';
 
 const LetterGlitch = ({
   glitchColors = ['#2b4539', '#61dca3', '#61b3dc'],
@@ -7,7 +8,8 @@ const LetterGlitch = ({
   centerVignette = false,
   outerVignette = true,
   smooth = true,
-  characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&*()-_+=/[]{};:<>.,0123456789'
+  // Skip []{} — in canvas monospace they render as empty squares on top of the rain.
+  characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$&*()-_+=/<>.,0123456789'
 }) => {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
@@ -78,20 +80,17 @@ const LetterGlitch = ({
     const parent = canvas.parentElement;
     if (!parent) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const rect = parent.getBoundingClientRect();
+    const width = parent.clientWidth;
+    const height = parent.clientHeight;
+    if (width < 2 || height < 2) return;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
+    const { dpr } = fitCanvasBuffer(canvas, width, height);
 
     if (context.current) {
       context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    const { columns, rows } = calculateGrid(rect.width, rect.height);
+    const { columns, rows } = calculateGrid(width, height);
     initializeLetters(columns, rows);
 
     drawLetters();
@@ -175,25 +174,14 @@ const LetterGlitch = ({
     if (!canvas) return;
 
     context.current = canvas.getContext('2d');
-    resizeCanvas();
+    const stopObserving = observeBox(canvas.parentElement, () => {
+      resizeCanvas();
+    });
     animate();
 
-    let resizeTimeout;
-
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        cancelAnimationFrame(animationRef.current);
-        resizeCanvas();
-        animate();
-      }, 100);
-    };
-
-    window.addEventListener('resize', handleResize);
-
     return () => {
+      stopObserving();
       cancelAnimationFrame(animationRef.current);
-      window.removeEventListener('resize', handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [glitchSpeed, smooth]);

@@ -389,9 +389,8 @@
     });
   </script>
   <script type="module">
-  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-  const supabase = createClient("https://yaijmwhijxpjyifvsvlc.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhaWptd2hpanhwanlpZnZzdmxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwOTA0MDUsImV4cCI6MjA3MzY2NjQwNX0.TI8gQUpK6vaXdWDri3P63pNJ286gGgQcqI5Rblfkoos");
+  const CONTACT_ENDPOINT =
+    "https://script.google.com/macros/s/AKfycbz6fDFs2rlqcbz2kFElsCAtBDFB7ZZcb8ZUATaQR1jtwbgKax58mal9vlV6bZmsXtcX/exec";
 
   document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -400,18 +399,29 @@
     const email = document.getElementById('email').value.trim();
     const phone = document.getElementById('phone').value.trim();
     const company = document.getElementById('company').value.trim();
-    const feedback = document.getElementById('feedback').value.trim();
+    const message = (document.getElementById('feedback') || document.getElementById('message'))?.value.trim() || "";
+    const extra = [
+      phone && `Phone: ${phone}`,
+      company && `Company: ${company}`
+    ].filter(Boolean).join("\n");
 
-    const { data, error } = await supabase
-      .from('contact_submissions')
-      .insert([{ name, email, phone, company, feedback }]);
-
-    if (error) {
-      alert("Something went wrong: " + error.message);
-    } else {
+    try {
+      const response = await fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          name,
+          email,
+          message: extra ? `${message}\n\n${extra}` : message,
+          website: ""
+        })
+      });
       document.getElementById('contactForm').reset();
       document.getElementById('success-message').classList.remove('opacity-0');
       document.getElementById('success-message').classList.add('opacity-100');
+    } catch (error) {
+      alert("Something went wrong: " + error.message);
     }
   });
 </script>

@@ -55,5 +55,12 @@
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100%;
   }
 }

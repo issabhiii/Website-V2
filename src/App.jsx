@@ -1,54 +1,54 @@
-import React, { useEffect, useState, useRef } from 'react'
-import DotGrid from './components/DotGrid'
-import ShinyText from './components/ShinyText'
-import GradientText from './components/GradientText'
-import DecryptedText from './components/DecryptedText'
+import React, { useEffect, useState } from 'react'
 import ClickSpark from './components/ClickSpark'
 import LiquidEther from './components/LiquidEther';
-import LetterGlitch from './components/LetterGlitch';
 import './App.css'
 import GlassSurface from './components/GlassSurface';
 import './components/GlassSurface.css';
-import { createClient } from "@supabase/supabase-js";
+import ProfileCard from './components/ProfileCard';
+import MagicBento from './components/MagicBento';
+import GlassBento from './components/GlassBento';
+import ExperienceTimeline from './components/ExperienceTimeline';
+import './components/FluidGlass.css';
 
-const supabase = createClient(
-  "https://yaijmwhijxpjyifvsvlc.supabase.co", // your URL
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhaWptd2hpanhwanlpZnZzdmxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwOTA0MDUsImV4cCI6MjA3MzY2NjQwNX0.TI8gQUpK6vaXdWDri3P63pNJ286gGgQcqI5Rblfkoos" // anon key
-);
+const CONTACT_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbz6fDFs2rlqcbz2kFElsCAtBDFB7ZZcb8ZUATaQR1jtwbgKax58mal9vlV6bZmsXtcX/exec';
+
+async function sendContactMessage({ name, email, message, website }) {
+  // Apps Script web apps 302 the POST; `no-cors` lets the write succeed
+  // without the browser blocking on the redirect / missing doGet.
+  await fetch(CONTACT_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8',
+    },
+    body: JSON.stringify({
+      name,
+      email,
+      message,
+      website,
+    }),
+  });
+}
 
 
+
+const LINKEDIN_URL = "https://www.linkedin.com/in/abhinav-jain-9881b8296/";
+const GITHUB_URL = "https://github.com/issabhiii";
+const RESUME_URL = "/Abhinav Jain-Resume.pdf";
 
 function App() {
-  const [nameText, setNameText] = useState("Hello, I'm Abhinav Jain");
-  const [isOpen, setIsOpen] = useState(false);
-  const navRef = useRef(null);
-// Inside your App component, add these states at the top:
-const [loading, setLoading] = useState(false);
-const [success, setSuccess] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [company, setCompany] = useState('');
+  const [message, setMessage] = useState('');
+  const [website, setWebsite] = useState('');
+  const [status, setStatus] = useState('idle');
 
-// Add this useEffect so feather icons refresh when success overlay shows
-useEffect(() => {
-  if (window.feather) window.feather.replace();
-}, [success]);
-
-  const handleNameClick = () => {
-    setNameText(
-      nameText === "Hello, I'm Abhinav Jain"
-        ? "you can call me Abhi"
-        : "Hello, I'm Abhinav Jain"
-    );
-  };
-
-  // Close menu on outside click
   useEffect(() => {
-    function handleClickOutside(e) {
-      if (navRef.current && !navRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    }
-    if (isOpen) document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
+    if (window.feather) window.feather.replace();
+  }, [status]);
 
   useEffect(() => {
     if (window.AOS) window.AOS.init({ duration: 800, once: true });
@@ -81,87 +81,51 @@ useEffect(() => {
         duration={400}
       >
         <div className="min-h-screen">
-          {/* Backdrop for mobile */}
-          {isOpen && (
-            <div
-              className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm md:hidden"
-              onClick={() => setIsOpen(false)}
-            />
-          )}
-
           {/* Navigation */}
           <div className="fixed w-full z-50 flex justify-center pt-4">
             <GlassSurface
-              ref={navRef}
               width="80%"
-              height={isOpen ? 240 : 72}
+              height={72}
               borderRadius={50}
               displace={10}
               distortionScale={250}
               brightness={85}
               opacity={0.1}
               blur={18}
-              className="flex flex-col px-6 md:px-12 border border-white/30 shadow-[0_0_25px_rgba(255,255,255,0.15)] w-[80%] md:w-[69%] transition-all duration-300"
+              className="flex items-center px-6 md:px-12 border border-white/30 shadow-[0_0_25px_rgba(255,255,255,0.15)] w-[80%] md:w-[69%]"
               style={{
                 boxShadow:
                   "0 0 15px rgba(255,255,255,0.3), 0 0 30px rgba(255,255,255,0.1) inset",
                 border: "1px solid rgba(255,255,255,0.4)",
               }}
             >
-              {/* Top Row */}
               <div className="flex justify-between items-center w-full">
                 <a
-                  href="https://www.linkedin.com/in/abhinav-jain-9881b8296/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#hero"
                   className="text-xl md:text-2xl font-bold gradient-text whitespace-nowrap hover:scale-105 transition-transform"
                 >
-                  Abhinav Jain | Dec 2027
+                  Abhinav Jain
                 </a>
 
-                {/* Desktop Links + Mobile Button */}
-                <div className="flex items-center space-x-6">
-                  <div className="hidden md:flex space-x-10">
-                    <a href="#hero" className="hover:text-purple-400 transition-colors">
-                      Home
-                    </a>
-                    <a href="#about" className="hover:text-purple-400 transition-colors">
-                      About
-                    </a>
-                    <a href="#experience" className="hover:text-purple-400 transition-colors">
-                      Experience
-                    </a>
-                    <a href="#contact" className="hover:text-purple-400 transition-colors">
-                      Contact
-                    </a>
-                  </div>
-
-                  {/* Mobile Hamburger / Close Icon */}
-                  <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="md:hidden text-gray-100 pointer-events-auto focus:outline-none"
+                <div className="hidden md:flex items-center space-x-5 lg:space-x-8 text-sm lg:text-base">
+                  <a href="#experience" className="hover:text-purple-400 transition-colors">
+                    Experience
+                  </a>
+                  <a href="#projects" className="hover:text-purple-400 transition-colors">
+                    Projects
+                  </a>
+                  <a
+                    href={RESUME_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-purple-400 transition-colors"
                   >
-                    {isOpen ? (
-                      <i data-feather="x" className="w-6 h-6"></i>
-                    ) : (
-                      <i data-feather="menu" className="w-6 h-6"></i>
-                    )}
-                  </button>
+                    Resume
+                  </a>
+                  <a href="#contact" className="hover:text-purple-400 transition-colors">
+                    Contact
+                  </a>
                 </div>
-              </div>
-
-              {/* Mobile Menu */}
-              <div
-                className={`md:hidden flex flex-col items-start space-y-4 mt-4 overflow-hidden transition-all duration-300 ${
-                  isOpen
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 -translate-y-4 pointer-events-none"
-                }`}
-              >
-                <a href="#hero" onClick={() => setIsOpen(false)}>Home</a>
-                <a href="#about" onClick={() => setIsOpen(false)}>About</a>
-                <a href="#experience" onClick={() => setIsOpen(false)}>Experience</a>
-                <a href="#contact" onClick={() => setIsOpen(false)}>Contact</a>
               </div>
             </GlassSurface>
           </div>
@@ -170,7 +134,7 @@ useEffect(() => {
      {/* Hero Section */}
 <section
   id="hero"
-  className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden px-6"
+  className="relative min-h-screen overflow-x-hidden px-4 md:px-8"
 >
   <div className="absolute inset-0">
   <LiquidEther
@@ -193,289 +157,135 @@ useEffect(() => {
 </div>
 
 
-  {/* Hero Content Container */}
-  <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center">
-    {/* Profile Image */}
-    <div className="hero-img-wrapper mb-8">
-      <img src="/me.png" alt="Abhinav Jain"
-        className="hero-img w-40 h-40 md:w-60 md:h-60 rounded-full border-4 border-white/20 shadow-lg hover:scale-105 transition-transform"
+  <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col justify-center gap-6 pt-28 pb-10">
+    <div className="flex w-full flex-col items-center gap-10 lg:flex-row lg:items-stretch lg:gap-12">
+    <div className="hero-profile flex shrink-0 items-center">
+      <ProfileCard
+        name="Abhinav Jain"
+        title="Software Engineer"
+        subtitle="Building AI systems, developer tools & infrastructure"
+        handle="abhinav-jain"
+        status="LinkedIn"
+        contactText="Contact Me"
+        avatarUrl="/me.png"
+        showUserInfo
+        enableTilt
+        enableMobileTilt={false}
+        behindGlowEnabled
+        behindGlowColor="rgba(139, 92, 246, 0.35)"
+        innerGradient="none"
+        onContactClick={() => window.open(LINKEDIN_URL, '_blank', 'noopener,noreferrer')}
       />
     </div>
-
-    {/* Text + Buttons */}
-    <h1 className="text-3xl md:text-5xl font-bold mb-4">
-      <span
-        onClick={handleNameClick}
-        className="cursor-pointer transition-all duration-300 hover:scale-105 inline-block"
-      >
-        <GradientText
-          colors={["#ffffff", "#8b5cf6", "#ffffff", "#6366f1", "#ffffff"]}
-          animationSpeed={8}
-          showBorder={false}
-          className="text-3xl md:text-5xl font-bold"
-        >
-          {nameText}
-        </GradientText>
-      </span>
-    </h1>
-
-    <p className="text-xl md:text-2xl mb-3 text-gray-300">
-      Computer Science Major & Full Stack Developer
-    </p>
-    <p className="text-lg md:text-xl mb-8 text-gray-400">
-      Building innovative solutions with modern technologies
-    </p>
-
-    {/* Action Buttons */}
-    <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
+    <div id="projects" className="hero-bento relative flex w-full min-w-0 flex-1 items-center">
+      <MagicBento
+        textAutoHide
+        enableStars={false}
+        enableSpotlight
+        enableBorderGlow
+        enableTilt={false}
+        enableMagnetism={false}
+        clickEffect
+        spotlightRadius={170}
+        particleCount={8}
+        glowColor="139, 92, 246"
+        cards={[
+          {
+            title: 'AgentForge',
+            description:
+              'Internal LLM-agent orchestration system for turning feature requests into tested, review-ready code.',
+            label: 'Experience · Ooredoo Qatar',
+            
+            stack: 'C# · .NET · Azure · LLM Agents · Static Analysis',
+            href: '#experience'
+          },
+          {
+            title: 'Wisconsin Robotics',
+            description:
+              'Website & Outreach Automation Developer. React/Supabase website infrastructure and automated member/sponsor outreach.',
+            label: 'Current',
+            stack: 'React · Supabase · Automation',
+            href: '#experience'
+          },
+          {
+            title: 'Bhasha',
+            description:
+              'Built and launched an AI-powered language learning platform and cross-platform Flutter app used by 200+ users.',
+            label: 'Founding Engineer',
+            stack: 'Flutter · Dart · Supabase',
+            href: '#experience'
+          },
+          {
+            title: 'Snap',
+            description:
+              'Immutable execution history for code. Tracks user and AI-agent changes against exact Git tree states so every run is reproducible and traceable.',
+            label: 'Developer Tool',
+            stack: 'TypeScript · Git · Node.js',
+            href: '#experience'
+          },
+          {
+            title: 'PrivacyGuard',
+            description: 'Real-time browser tracking detection and blocking using Chrome network APIs.',
+            label: 'Security',
+            stack: 'JavaScript · Chrome APIs · DOM',
+            href: '#experience'
+          },
+          {
+            title: 'Homelab',
+            description:
+              'Self-hosted Linux infrastructure with Docker, authenticated telemetry, DNS filtering, remote development, and monitoring.',
+            label: 'Infrastructure',
+            stack: 'Linux · Docker · Networking · HMAC',
+            href: '#experience'
+          }
+        ]}
+      />
+      <div className="fluid-glass-overlay">
+        <GlassBento
+          ior={1.3}
+          thickness={3}
+          chromaticAberration={0.23}
+          anisotropy={0.05}
+        />
+      </div>
+    </div>
+    </div>
+    <div className="hero-actions flex flex-wrap items-center justify-center gap-3">
       <a
-        href="#about"
-        className="px-8 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors"
+        href={RESUME_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="rounded-full border border-white/30 bg-white/5 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-purple-400/70 hover:bg-white/10"
       >
-        <ShinyText text="Explore My Work" speed={5} />
+        View Resume
       </a>
       <a
-        href="mailto:abhinav.jain.0461@gmail.com"
-        className="px-8 py-3 border border-purple-600 hover:bg-purple-600 rounded-lg transition-colors"
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="rounded-full border border-white/30 bg-white/5 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-purple-400/70 hover:bg-white/10"
       >
-        <ShinyText text="Get In Touch" speed={5} />
+        GitHub
+      </a>
+      <a
+        href="#contact"
+        className="rounded-full border border-white/30 bg-white/5 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:border-purple-400/70 hover:bg-white/10"
+      >
+        Contact Me
       </a>
     </div>
-
-    {/* Social Buttons */}
-   
-<div className="flex justify-center space-x-6 mt-4">
-  <a
-    href="https://www.linkedin.com/in/abhinav-jain-9881b8296/"
-    target="_blank"
-    className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
-  >
-    <i data-feather="linkedin" className="w-5 h-5 text-purple-400 hover:text-white"></i>
-  </a>
-
-  <a
-    href="https://github.com/issabhiii"
-    target="_blank"
-    className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
-  >
-    <i data-feather="github" className="w-5 h-5 text-purple-400 hover:text-white"></i>
-  </a>
-
-  {/* Email Copy Button */}
-  {/* Email Button */}
-<button
-  onClick={(e) => {
-    // 1. Copy email to clipboard
-    const email = "abhinav.jain.0461@gmail.com";
-    navigator.clipboard.writeText(email);
-
-    // 2. Open default email app
-    window.location.href = `mailto:${email}`;
-
-
-
-
-  }}
-  className="p-3 border-2 border-purple-400 rounded-full hover:bg-purple-600 hover:border-purple-600 transition-all"
->
-  <i data-feather="mail" className="w-5 h-5 text-purple-400 hover:text-white"></i>
-</button>
-</div>
-
-
-
-    {/* Resume Button */}
-<div className="mt-6 flex justify-center">
-  <a
-    href="/Abhinav Jain-Resume.pdf"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="px-8 py-3 border-2 border-purple-400 text-purple-400 font-semibold text-center rounded-full hover:bg-purple-600 hover:border-purple-600 hover:text-white transition-all"
-  >
-    <ShinyText text="View Resume" speed={5} />
-  </a>
-</div>
-
-  </div>
-</section>
-
-{/* About Section */}
-<section id="about" className="relative z10 py-20 bg-gray-800">
-  <div className="container mx-auto px-6">
-    <h2 className="text-4xl font-bold text-center mb-16" data-aos="fade-up">
-      <DecryptedText 
-        text="Skills & Expertise" 
-        animateOn="view"
-        speed={80}
-        maxIterations={15}
-        revealDirection="center"
-        className="text-4xl font-bold text-center text-white"
-        encryptedClassName="text-4xl font-bold text-center text-purple-300"
-      />
-    </h2>
-
-    <div className="grid md:grid-cols-3 gap-8">
-
-      {/* Tile 1 */}
-      <div className="relative skill-tile glass-effect p-8 rounded-xl transition-all duration-300 overflow-hidden" data-aos="fade-up" data-aos-delay="100">
-        {/* Background should not expand container */}
-        <div className="absolute inset-0 z-0">
-          <LetterGlitch
-            glitchSpeed={50}
-            className="w-full h-full opacity-30"
-            centerVignette={true}
-            outerVignette={false}
-            smooth={true}
-          />
-        </div>
-
-        {/* Foreground */}
-        <div className="relative z-10">
-          <div className="text-center mb-6">
-            <i data-feather="layout" className="w-12 h-12 text-purple-400 mx-auto"></i>
-          </div>
-          <h3 className="text-2xl font-bold mb-4 text-center">
-            <DecryptedText 
-              text="Frontend Development" 
-              animateOn="view"
-              speed={60}
-              maxIterations={12}
-              revealDirection="start"
-              className="text-2xl font-bold text-center text-white"
-              encryptedClassName="text-2xl font-bold text-center text-purple-200"
-            />
-          </h3>
-          <ul className="space-y-2 text-gray-300">
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> React.js & Next.js</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Flutter SDK</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Tailwind CSS & SASS</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> TypeScript</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> UI/UX Design</li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Repeat same pattern for other two tiles */}
-      {/* Backend Development */}
-      <div className="relative skill-tile glass-effect p-8 rounded-xl transition-all duration-300 overflow-hidden" data-aos="fade-up" data-aos-delay="200">
-        <div className="absolute inset-0 z-0">
-          <LetterGlitch
-            glitchSpeed={50}
-            className="w-full h-full opacity-30"
-            centerVignette={true}
-            outerVignette={false}
-            smooth={true}
-          />
-        </div>
-
-        <div className="relative z-10">
-          <div className="text-center mb-6">
-            <i data-feather="server" className="w-12 h-12 text-purple-400 mx-auto"></i>
-          </div>
-          <h3 className="text-2xl font-bold mb-4 text-center">
-            <DecryptedText text="Backend Development" animateOn="view" speed={60} maxIterations={12} revealDirection="start" className="text-2xl font-bold text-center text-white" encryptedClassName="text-2xl font-bold text-center text-purple-200"/>
-          </h3>
-          <ul className="space-y-2 text-gray-300">
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Node.js & Express</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Python & Django</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> PostgreSQL & Supabase</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Hive & Isar</li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Other Expertise */}
-      <div className="relative skill-tile glass-effect p-8 rounded-xl transition-all duration-300 overflow-hidden" data-aos="fade-up" data-aos-delay="300">
-        <div className="absolute inset-0 z-0">
-          <LetterGlitch
-            glitchSpeed={50}
-            className="w-full h-full opacity-30"
-            centerVignette={true}
-            outerVignette={false}
-            smooth={true}
-          />
-        </div>
-
-        <div className="relative z-10">
-          <div className="text-center mb-6">
-            <i data-feather="cpu" className="w-12 h-12 text-purple-400 mx-auto"></i>
-          </div>
-          <h3 className="text-2xl font-bold mb-4 text-center">
-            <DecryptedText text="Other Expertise" animateOn="view" speed={60} maxIterations={12} revealDirection="start" className="text-2xl font-bold text-center text-white" encryptedClassName="text-2xl font-bold text-center text-purple-200"/>
-          </h3>
-          <ul className="space-y-2 text-gray-300">
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Machine Learning</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Data Structures</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Algorithms</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Complete App Planning and Development</li>
-            <li className="flex items-center"><i data-feather="check" className="w-4 h-4 text-green-400 mr-2"></i> Leadership</li>
-          </ul>
-        </div>
-      </div>
-
+    <div className="hero-skills w-full text-center">
+      <p className="text-sm font-medium tracking-wide text-white/85 md:text-[0.95rem]">
+        Python · TypeScript · C# · Dart · React · .NET · Flutter · Node.js · Docker · Linux · Azure · PostgreSQL
+      </p>
+      <p className="mt-2 text-xs tracking-wide text-white/55 md:text-sm">
+        LLM Agents · Tool Calling · Model Routing · Static Analysis · Git · REST APIs · Networking
+      </p>
     </div>
   </div>
 </section>
 
-
-
-      {/* Experience Section */}
-      <section id="experience" className="relative py-20 bg-gray-900">
-      <div className="absolute inset-0 z-0">
-            <DotGrid
-              dotSize={8}
-              gap={20}
-              baseColor="#1e1b4b"
-              activeColor="#8b5cf6"
-              proximity={120}
-              shockRadius={369}
-              shockStrength={6.9}
-              resistance={469}
-              returnDuration={1.69}
-            />
-          </div>
-        <div className="container mx-auto px-6">
-          <h2 className="text-4xl font-bold text-center mb-16" data-aos="fade-up">Professional Journey</h2>
-          <div className="max-w-4xl mx-auto relative space-y-12">
-
-            {/* App Developer */}
-            <div className="ml-8 timeline-item relative glass-effect p-6 rounded-xl" data-aos="fade-right">
-              <span className="text-sm text-purple-400">May 2025 – Present</span>
-              <h3 className="text-xl font-bold mb-2">App Developer – <span className="italic">Bhasha</span></h3>
-              <ul className="list-disc list-inside text-gray-300 space-y-2">
-                <li>Initiated the development of an innovative learning platform dedicated to preserving and revitalizing underrepresented languages of the Indian subcontinent.</li>
-                <li>Fully developed the company website with a React-based framework, implementing server-side rendering and using Supabase for backend services.</li>
-                <li>Currently leveraging Flutter and Dart to build a cross-platform learning experience, with future plans to integrate AI-powered chatbots to personalize language learning.</li>
-              </ul>
-            </div>
-
-            {/* Front Desk Assistant */}
-            <div className="ml-8 timeline-item relative glass-effect p-6 rounded-xl" data-aos="fade-left">
-              <span className="text-sm text-purple-400">Jan 2025 – May 2025</span>
-              <h3 className="text-xl font-bold mb-2">Front Desk Office Assistant – <span className="italic">UMN Twin Cities Residence Halls</span></h3>
-              <ul className="list-disc list-inside text-gray-300 space-y-2">
-                <li>Worked the front desk at the University of Minnesota residence halls, ensuring smooth operations and student satisfaction.</li>
-                <li>Provided around-the-clock customer service to residents, guests, and university staff by responding to inquiries, resolving concerns, and fostering a welcoming community.</li>
-                <li>Enforced university housing policies with professionalism, reported incidents, and ensured safety protocols were followed.</li>
-                <li>Managed key inventories, mail distribution, and secure handling of packages.</li>
-                <li>Supported administrative tasks including data entry, room lockouts, incident documentation, and coordination with Resident Advisors and campus security.</li>
-              </ul>
-            </div>
-
-            {/* Upcoming */}
-            <div className="ml-8 timeline-item relative glass-effect p-6 rounded-xl" data-aos="fade-up">
-              <h3 className="text-2xl font-bold mb-4 gradient-text">Upcoming</h3>
-              <p className="text-gray-300 mb-3">
-                🎯 Officially stepping in as <strong>Head of Website & Communications</strong> for the Wisconsin Robotics team. Leading a full redesign of the team's digital presence, building a responsive website and streamlining communication channels for team members and sponsors.
-              </p>
-              <p className="text-gray-300">
-                🎶 Building a dedicated student portal for <strong>Cadenza School of Musica</strong> — complete with scheduling, payments, and teacher-student communication — to bring a seamless, modern experience to music education management.
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </section>
+      <ExperienceTimeline />
 
       {/* Contact Section */}
       <section id="contact" className="min-h-screen flex flex-col md:flex-row items-center justify-center px-4 md:px-12 py-16 space-y-8 md:space-y-0 md:space-x-12 relative overflow-hidden bg-[#111827]">
@@ -499,87 +309,150 @@ useEffect(() => {
           <p className="text-center md:text-left text-gray-300 mb-10">We'd love to hear from you</p>
 
           <form
-  id="contactForm"
-  className="space-y-6"
-  onSubmit={async (e) => {
-    e.preventDefault();
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const company = document.getElementById("company").value.trim();
-    const feedback = document.getElementById("feedback").value.trim();
+            id="contactForm"
+            className="space-y-6 relative"
+            onSubmit={async (e) => {
+              e.preventDefault();
 
-    // Insert to Supabase
-    const { error } = await supabase.from("contact_submissions").insert([
-      { name, email, phone, company, feedback },
-    ]);
+              const extra = [
+                phone.trim() && `Phone: ${phone.trim()}`,
+                company.trim() && `Company: ${company.trim()}`
+              ]
+                .filter(Boolean)
+                .join('\n');
+              const fullMessage = extra ? `${message.trim()}\n\n${extra}` : message.trim();
 
-    if (error) {
-      alert("Error: " + error.message);
-    } else {
-      alert("✅ Message sent successfully!");
-      e.target.reset();
-    }
-  }}
->
+              try {
+                setStatus('sending');
+                await sendContactMessage({
+                  name: name.trim(),
+                  email: email.trim(),
+                  message: fullMessage,
+                  website
+                });
+                setStatus('success');
+                setName('');
+                setEmail('');
+                setPhone('');
+                setCompany('');
+                setMessage('');
+                setWebsite('');
+              } catch (error) {
+                console.error(error);
+                setStatus('error');
+              }
+            }}
+          >
+            <input
+              type="text"
+              name="website"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                left: '-9999px'
+              }}
+            />
 
-            {/* Name */}
             <div className="relative">
-              <input type="text" id="name" required autoComplete="off"
-                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"/>
-              <label htmlFor="name" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+              <input
+                type="text"
+                id="name"
+                required
+                autoComplete="off"
+                placeholder=" "
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <label htmlFor="name" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm peer-[&:not(:placeholder-shown)]:top-[-10px] peer-[&:not(:placeholder-shown)]:text-purple-400 peer-[&:not(:placeholder-shown)]:text-sm">
                 Your Name <span className="text-red-400">*</span>
               </label>
             </div>
 
-            {/* Email */}
             <div className="relative">
-              <input type="email" id="email" required autoComplete="off"
-                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"/>
-              <label htmlFor="email" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+              <input
+                type="email"
+                id="email"
+                required
+                autoComplete="off"
+                placeholder=" "
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <label htmlFor="email" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm peer-[&:not(:placeholder-shown)]:top-[-10px] peer-[&:not(:placeholder-shown)]:text-purple-400 peer-[&:not(:placeholder-shown)]:text-sm">
                 Email Address <span className="text-red-400">*</span>
               </label>
             </div>
 
-            {/* Phone */}
             <div className="relative">
-              <input type="tel" id="phone" autoComplete="off"
-                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"/>
-              <label htmlFor="phone" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+              <input
+                type="tel"
+                id="phone"
+                autoComplete="off"
+                placeholder=" "
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <label htmlFor="phone" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm peer-[&:not(:placeholder-shown)]:top-[-10px] peer-[&:not(:placeholder-shown)]:text-purple-400 peer-[&:not(:placeholder-shown)]:text-sm">
                 Phone Number (Optional)
               </label>
             </div>
 
-            {/* Company */}
             <div className="relative">
-              <input type="text" id="company" autoComplete="off"
-                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"/>
-              <label htmlFor="company" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
+              <input
+                type="text"
+                id="company"
+                autoComplete="off"
+                placeholder=" "
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <label htmlFor="company" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm peer-[&:not(:placeholder-shown)]:top-[-10px] peer-[&:not(:placeholder-shown)]:text-purple-400 peer-[&:not(:placeholder-shown)]:text-sm">
                 Company Name (Optional)
               </label>
             </div>
 
-            {/* Feedback */}
             <div className="relative">
-              <textarea id="feedback" rows="4"
-                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"></textarea>
-              <label htmlFor="feedback" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm">
-                Feedback (Optional)
+              <textarea
+                id="message"
+                rows="4"
+                required
+                placeholder=" "
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="peer w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-purple-500"
+              />
+              <label htmlFor="message" className="absolute left-4 top-3 text-gray-400 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-[-10px] peer-focus:text-purple-400 peer-focus:text-sm peer-[&:not(:placeholder-shown)]:top-[-10px] peer-[&:not(:placeholder-shown)]:text-purple-400 peer-[&:not(:placeholder-shown)]:text-sm">
+                Message <span className="text-red-400">*</span>
               </label>
             </div>
 
-            {/* Submit Button */}
-            <button type="submit"
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-full transition-all duration-300 flex items-center justify-center">
-              <i data-feather="send" className="w-5 h-5 mr-2"></i> Send Message
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-60 text-white font-semibold py-3 rounded-full transition-all duration-300 flex items-center justify-center"
+            >
+              <i data-feather="send" className="w-5 h-5 mr-2"></i>
+              {status === 'sending' ? 'Sending…' : 'Send Message'}
             </button>
           </form>
 
-          {/* Success Message */}
-          <div className="mt-8 text-center text-green-400 opacity-0 transition-opacity duration-300" id="success-message">
-            <i data-feather="check-circle" className="w-8 h-8 mx-auto mb-2"></i>
-            <p>Thank you! Your message has been sent successfully.</p>
-          </div>
+          {status === 'success' ? (
+            <div className="mt-8 text-center text-green-400">
+              <i data-feather="check-circle" className="w-8 h-8 mx-auto mb-2"></i>
+              <p>Thank you! Your message has been sent successfully.</p>
+            </div>
+          ) : null}
+          {status === 'error' ? (
+            <p className="mt-6 text-center text-red-400">Something went wrong. Please try again.</p>
+          ) : null}
         </div>
       </section>
       

@@ -1,4 +1,5 @@
 import { useRef, useEffect, useCallback } from 'react';
+import { measureBox, observeBox } from '../lib/fitCanvas';
 
 const ClickSpark = ({
   sparkColor = '#fff',
@@ -21,30 +22,22 @@ const ClickSpark = ({
     const parent = canvas.parentElement;
     if (!parent) return;
 
-    let resizeTimeout;
-
-    const resizeCanvas = () => {
-      const { width, height } = parent.getBoundingClientRect();
+    const resizeCanvas = (nextWidth, nextHeight) => {
+      const { width, height } = nextWidth != null
+        ? { width: nextWidth, height: nextHeight }
+        : measureBox(parent);
+      if (width < 2 || height < 2) return;
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
       }
+      canvas.style.width = '100%';
+      canvas.style.height = '100%';
     };
 
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resizeCanvas, 100);
-    };
-
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(parent);
-
-    resizeCanvas();
-
-    return () => {
-      ro.disconnect();
-      clearTimeout(resizeTimeout);
-    };
+    return observeBox(parent, (width, height) => {
+      resizeCanvas(width, height);
+    });
   }, []);
 
   const easeFunc = useCallback(

@@ -2,6 +2,7 @@
 import { useRef, useEffect, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
+import { fitCanvasBuffer, observeBox } from '../lib/fitCanvas';
 
 import './DotGrid.css';
 
@@ -68,20 +69,21 @@ const DotGrid = ({
     return p;
   }, [dotSize]);
 
-  const buildGrid = useCallback(() => {
+  const sizeRef = useRef({ width: 0, height: 0, dpr: 1 });
+
+  const buildGrid = useCallback((nextWidth, nextHeight) => {
     const wrap = wrapperRef.current;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
 
-    const { width, height } = wrap.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+    const width = nextWidth ?? wrap.clientWidth;
+    const height = nextHeight ?? wrap.clientHeight;
+    if (width < 2 || height < 2) return;
 
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    const { dpr } = fitCanvasBuffer(canvas, width, height);
+    sizeRef.current = { width, height, dpr };
     const ctx = canvas.getContext('2d');
-    if (ctx) ctx.scale(dpr, dpr);
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     const cols = Math.floor((width + gap) / (dotSize + gap));
     const rows = Math.floor((height + gap) / (dotSize + gap));
@@ -118,7 +120,10 @@ const DotGrid = ({
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const { width, height, dpr } = sizeRef.current;
+      if (!width || !height) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
 
       const { x: px, y: py } = pointerRef.current;
 
@@ -154,18 +159,9 @@ const DotGrid = ({
   }, [proximity, baseColor, activeRgb, baseRgb, circlePath]);
 
   useEffect(() => {
-    buildGrid();
-    let ro = null;
-    if ('ResizeObserver' in window) {
-      ro = new ResizeObserver(buildGrid);
-      wrapperRef.current && ro.observe(wrapperRef.current);
-    } else {
-      window.addEventListener('resize', buildGrid);
-    }
-    return () => {
-      if (ro) ro.disconnect();
-      else window.removeEventListener('resize', buildGrid);
-    };
+    return observeBox(wrapperRef.current, (width, height) => {
+      buildGrid(width, height);
+    });
   }, [buildGrid]);
 
   useEffect(() => {
