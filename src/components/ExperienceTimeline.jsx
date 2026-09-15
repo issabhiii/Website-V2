@@ -497,10 +497,10 @@ export default function ExperienceTimeline() {
     <section id="experience" className="exp-section" ref={sectionRef}>
       <div className="exp-bg" aria-hidden>
         <DotGrid
-          dotSize={8}
-          gap={20}
-          baseColor="#1e1b4b"
-          activeColor="#8b5cf6"
+          dotSize={3}
+          gap={22}
+          baseColor="#4c1d95"
+          activeColor="#a78bfa"
           proximity={120}
           shockRadius={369}
           shockStrength={6.9}

@@ -1,9 +1,7 @@
-'use client';
-import { useRef, useEffect, useCallback, useMemo } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { InertiaPlugin } from 'gsap/InertiaPlugin';
 import { fitCanvasBuffer, observeBox } from '../lib/fitCanvas';
-
 import './DotGrid.css';
 
 gsap.registerPlugin(InertiaPlugin);
@@ -20,8 +18,8 @@ const throttle = (func, limit) => {
 };
 
 function hexToRgb(hex) {
-  const m = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
-  if (!m) return { r: 0, g: 0, b: 0 };
+  const m = String(hex).match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+  if (!m) return { r: 99, g: 102, b: 241 };
   return {
     r: parseInt(m[1], 16),
     g: parseInt(m[2], 16),
@@ -47,6 +45,12 @@ const DotGrid = ({
   const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
   const dotsRef = useRef([]);
+  const sizeRef = useRef({ width: 0, height: 0, dpr: 1 });
+  const colorsRef = useRef({
+    baseColor,
+    baseRgb: hexToRgb(baseColor),
+    activeRgb: hexToRgb(activeColor)
+  });
   const pointerRef = useRef({
     x: 0,
     y: 0,
@@ -58,74 +62,84 @@ const DotGrid = ({
     lastY: 0
   });
 
-  const baseRgb = useMemo(() => hexToRgb(baseColor), [baseColor]);
-  const activeRgb = useMemo(() => hexToRgb(activeColor), [activeColor]);
+  colorsRef.current = {
+    baseColor,
+    baseRgb: hexToRgb(baseColor),
+    activeRgb: hexToRgb(activeColor)
+  };
 
-  const circlePath = useMemo(() => {
-    if (typeof window === 'undefined' || !window.Path2D) return null;
+  const buildGrid = useCallback(
+    (nextWidth, nextHeight) => {
+      const wrap = wrapperRef.current;
+      const canvas = canvasRef.current;
+      if (!wrap || !canvas) return;
 
-    const p = new window.Path2D();
-    p.arc(0, 0, dotSize / 2, 0, Math.PI * 2);
-    return p;
-  }, [dotSize]);
+      const width = nextWidth ?? wrap.clientWidth;
+      const height = nextHeight ?? wrap.clientHeight;
+      if (width < 2 || height < 2) return;
 
-  const sizeRef = useRef({ width: 0, height: 0, dpr: 1 });
+      const { dpr } = fitCanvasBuffer(canvas, width, height);
+      sizeRef.current = { width, height, dpr };
 
-  const buildGrid = useCallback((nextWidth, nextHeight) => {
-    const wrap = wrapperRef.current;
-    const canvas = canvasRef.current;
-    if (!wrap || !canvas) return;
+      const cell = dotSize + gap;
+      const cols = Math.max(1, Math.floor((width + gap) / cell));
+      const rows = Math.max(1, Math.floor((height + gap) / cell));
+      const gridW = cell * cols - gap;
+      const gridH = cell * rows - gap;
+      const startX = (width - gridW) / 2 + dotSize / 2;
+      const startY = (height - gridH) / 2 + dotSize / 2;
 
-    const width = nextWidth ?? wrap.clientWidth;
-    const height = nextHeight ?? wrap.clientHeight;
-    if (width < 2 || height < 2) return;
-
-    const { dpr } = fitCanvasBuffer(canvas, width, height);
-    sizeRef.current = { width, height, dpr };
-    const ctx = canvas.getContext('2d');
-    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const cols = Math.floor((width + gap) / (dotSize + gap));
-    const rows = Math.floor((height + gap) / (dotSize + gap));
-    const cell = dotSize + gap;
-
-    const gridW = cell * cols - gap;
-    const gridH = cell * rows - gap;
-
-    const extraX = width - gridW;
-    const extraY = height - gridH;
-
-    const startX = extraX / 2 + dotSize / 2;
-    const startY = extraY / 2 + dotSize / 2;
-
-    const dots = [];
-    for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-        const cx = startX + x * cell;
-        const cy = startY + y * cell;
-        dots.push({ cx, cy, xOffset: 0, yOffset: 0, _inertiaApplied: false });
+      const dots = [];
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          dots.push({
+            cx: startX + x * cell,
+            cy: startY + y * cell,
+            xOffset: 0,
+            yOffset: 0,
+            _inertiaApplied: false
+          });
+        }
       }
-    }
-    dotsRef.current = dots;
-  }, [dotSize, gap]);
+      dotsRef.current = dots;
+    },
+    [dotSize, gap]
+  );
 
   useEffect(() => {
-    if (!circlePath) return;
-
-    let rafId;
+    let rafId = 0;
     const proxSq = proximity * proximity;
+    const radius = Math.max(1, dotSize / 2);
 
     const draw = () => {
       const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      const { width, height, dpr } = sizeRef.current;
-      if (!width || !height) return;
+      const ctx = canvas?.getContext('2d');
+      if (!canvas || !ctx) {
+        rafId = requestAnimationFrame(draw);
+        return;
+      }
+
+      let { width, height, dpr } = sizeRef.current;
+      if (!width || !height) {
+        const wrap = wrapperRef.current;
+        if (wrap && wrap.clientWidth > 1 && wrap.clientHeight > 1) {
+          buildGrid(wrap.clientWidth, wrap.clientHeight);
+          ({ width, height, dpr } = sizeRef.current);
+        }
+      }
+
+      if (!width || !height) {
+        rafId = requestAnimationFrame(draw);
+        return;
+      }
+
+      if (!dotsRef.current.length) buildGrid(width, height);
+
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, width, height);
 
       const { x: px, y: py } = pointerRef.current;
+      const { baseColor: base, baseRgb, activeRgb } = colorsRef.current;
 
       for (const dot of dotsRef.current) {
         const ox = dot.cx + dot.xOffset;
@@ -134,7 +148,7 @@ const DotGrid = ({
         const dy = dot.cy - py;
         const dsq = dx * dx + dy * dy;
 
-        let style = baseColor;
+        let style = base;
         if (dsq <= proxSq) {
           const dist = Math.sqrt(dsq);
           const t = 1 - dist / proximity;
@@ -144,28 +158,23 @@ const DotGrid = ({
           style = `rgb(${r},${g},${b})`;
         }
 
-        ctx.save();
-        ctx.translate(ox, oy);
+        ctx.beginPath();
+        ctx.arc(ox, oy, radius, 0, Math.PI * 2);
         ctx.fillStyle = style;
-        ctx.fill(circlePath);
-        ctx.restore();
+        ctx.fill();
       }
 
       rafId = requestAnimationFrame(draw);
     };
 
-    draw();
+    rafId = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(rafId);
-  }, [proximity, baseColor, activeRgb, baseRgb, circlePath]);
+  }, [proximity, dotSize, buildGrid]);
+
+  useEffect(() => observeBox(wrapperRef.current, buildGrid), [buildGrid]);
 
   useEffect(() => {
-    return observeBox(wrapperRef.current, (width, height) => {
-      buildGrid(width, height);
-    });
-  }, [buildGrid]);
-
-  useEffect(() => {
-    const onMove = e => {
+    const onMove = (e) => {
       const now = performance.now();
       const pr = pointerRef.current;
       const dt = pr.lastTime ? now - pr.lastTime : 16;
@@ -187,7 +196,9 @@ const DotGrid = ({
       pr.vy = vy;
       pr.speed = speed;
 
-      const rect = canvasRef.current.getBoundingClientRect();
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
       pr.x = e.clientX - rect.left;
       pr.y = e.clientY - rect.top;
 
@@ -214,8 +225,10 @@ const DotGrid = ({
       }
     };
 
-    const onClick = e => {
-      const rect = canvasRef.current.getBoundingClientRect();
+    const onClick = (e) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
       const cx = e.clientX - rect.left;
       const cy = e.clientY - rect.top;
       for (const dot of dotsRef.current) {
@@ -245,7 +258,6 @@ const DotGrid = ({
     const throttledMove = throttle(onMove, 50);
     window.addEventListener('mousemove', throttledMove, { passive: true });
     window.addEventListener('click', onClick);
-
     return () => {
       window.removeEventListener('mousemove', throttledMove);
       window.removeEventListener('click', onClick);
