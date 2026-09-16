@@ -35,7 +35,7 @@ async function sendContactMessage({ name, email, message, website }) {
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/abhinav-jain-9881b8296/";
 const GITHUB_URL = "https://github.com/issabhiii";
-const RESUME_URL = "/Abhinav Jain-Resume.pdf";
+const RESUME_URL = "/Resume_Abhinav_Jain.pdf";
 
 function App() {
   const [name, setName] = useState('');
@@ -193,18 +193,17 @@ function App() {
           {
             title: 'AgentForge',
             description:
-              'Internal LLM-agent orchestration system for turning feature requests into tested, review-ready code.',
-            label: 'Experience · Ooredoo Qatar',
-            
-            stack: 'C# · .NET · Azure · LLM Agents · Static Analysis',
+              'Internal AI development workflow engine at Ooredoo Qatar that turns feature requirements into tested, review-ready code.',
+            label: 'Internship · Ooredoo Qatar',
+            stack: 'C# · .NET · LLMs · Static Analysis · Copilot',
             href: '#experience'
           },
           {
             title: 'Wisconsin Robotics',
             description:
-              'Website & Outreach Automation Developer. React/Supabase website infrastructure and automated member/sponsor outreach.',
+              'Building the next public-facing Wisconsin Robotics website with React, Three.js, and Framer Motion.',
             label: 'Current',
-            stack: 'React · Supabase · Automation',
+            stack: 'React · Three.js · Framer Motion',
             href: '#experience'
           },
           {

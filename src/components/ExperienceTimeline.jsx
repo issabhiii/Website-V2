@@ -11,78 +11,84 @@ const EXPERIENCES = [
     date: 'Sep 2026 — Present',
     org: 'Wisconsin Robotics',
     role: 'Website & Outreach Automation Developer',
-    blurb: 'React/Supabase site and automated member/sponsor outreach.',
-    chips: ['React', 'Supabase', 'Automation'],
+    blurb: 'Building the next public-facing Wisconsin Robotics website.',
+    chips: ['React', 'Three.js', 'Framer Motion'],
     kicker: 'Current',
     headline: 'Wisconsin Robotics',
-    subhead: 'Website & outreach automation',
+    logo: '/experiencecards/WRlogo.png',
+    logoHref: 'https://wisconsinrobotics-website.vercel.app/',
+    subhead: 'Next public website',
     metrics: [
-      { value: 'React', label: 'site' },
-      { value: 'Supabase', label: 'CMS' },
-      { value: 'Auto', label: 'outreach' }
-    ],
-    flows: [
-      {
-        title: 'Content flow',
-        steps: ['Team leads', 'Supabase CMS', 'React site', 'Members / Sponsors']
-      },
-      {
-        title: 'Outreach',
-        steps: ['Lead', 'Form', 'Automation', 'Email', 'Follow-up']
-      }
+      { value: 'React 18', label: 'Vite 5' },
+      { value: 'Three.js', label: 'visuals' },
+      { value: 'Motion', label: 'framer' }
     ],
     surfaces: [
-      { title: 'Website', note: 'Live club site' },
-      { title: 'CMS', note: 'Non-dev edits' }
+      {
+        title: 'Website',
+        note: 'In development',
+        image: '/experiencecards/wisconsinroboticsheropage.png',
+        href: 'https://wisconsinrobotics-website.vercel.app/',
+        featured: true,
+        imageOnly: true
+      }
     ],
     sections: [
       {
-        title: 'What I built',
-        body: 'A React site backed by Supabase so leads can update content without a deploy, plus automated outreach for members and sponsors.'
+        title: 'Wisconsin Robotics Website',
+        subtitle: 'React 18 + Vite 5 · Three.js · Framer Motion',
+        bullets: [
+          'Building the next website for Wisconsin Robotics, designed to serve as the organization’s primary public-facing platform.',
+          'Currently in active development and hosted on my personal Vercel account, with a full public launch planned for Fall 2026.',
+          'Built with React and Vite, with Three.js and Framer Motion used for interactive visuals, motion, and a more polished browsing experience.',
+          'Designed to showcase the team’s projects, subteams, sponsors, and organization to prospective members and external partners.'
+        ]
       }
     ],
-    stack: ['React', 'Supabase', 'Email Automation'],
-    links: [{ href: 'https://wisconsinrobotics.org/', label: 'Visit Site →' }]
+    stack: ['React 18', 'Vite 5', 'Three.js', 'Framer Motion'],
+    links: [{ href: 'https://wisconsinrobotics-website.vercel.app/', label: 'Visit Site →' }]
   },
   {
     id: 'agentforge',
-    date: 'Jun 2026 — Jul 2026',
+    date: 'Summer 2026',
     org: 'AgentForge',
-    role: 'LLM-agent engineering system',
-    blurb: 'Turns feature requests into tested, review-ready code.',
+    role: 'Software Engineering Intern — Ooredoo Qatar',
+    blurb: 'Internal AI workflow engine that turns feature requests into tested, review-ready code.',
     chips: ['60+ steps', '500+ files', '−60% context', '−35% cost'],
-    kicker: 'Internship · Ooredoo Qatar',
+    kicker: 'Ooredoo Qatar · Software Engineering Internship',
     headline: 'AgentForge',
-    subhead: 'Internal LLM-agent engineering system',
+    product: 'AgentForge',
+    subhead: 'Summer 2026',
+    intro:
+      'Built AgentForge, an internal AI development workflow engine at Ooredoo Qatar designed to turn feature requirements into tested, review-ready code proposals.',
     metrics: [
       { value: '60+', label: 'steps' },
       { value: '500+', label: 'files' },
       { value: '↓60%', label: 'context' },
       { value: '↓35%', label: 'AI cost' }
     ],
-    flows: [
+    surfaces: [
       {
-        title: 'Architecture',
-        steps: [
-          'Requirement',
-          'Static analysis',
-          'Context',
-          'Router',
-          'Implement',
-          'Validate / retry',
-          'Telemetry',
-          'PR'
-        ]
+        title: 'Ooredoo Qatar',
+        image: '/experiencecards/ooredoo.png',
+        featured: true,
+        imageOnly: true,
+        fit: 'contain'
       }
     ],
     sections: [
       {
         title: 'What I built',
-        body: 'Indexed repositories, per-step model routing, deterministic validation, retries, and cost/prompt telemetry across failed steps.'
+        bullets: [
+          'Built a configurable LLM-agent orchestration system that decomposes feature requests into multi-step development workflows; validated across 2 workflows and 60+ execution steps.',
+          'Indexed 500+ files, symbols, dependencies, and tests with a static-analysis pipeline that ranked relevant repository context, reducing irrelevant context sent to models by up to 60%.',
+          'Implemented per-step routing across Copilot CLI, locally hosted models, and deterministic tools, reducing AI execution costs by 35%+ while allowing models, prompts, tools, and settings to be configured independently.',
+          'Added automated testing, security scanning, requirement validation, quality gates, and bounded retry loops, plus structured telemetry for prompts, costs, retries, failures, and step-level recovery.'
+        ]
       }
     ],
-    stack: ['C#', '.NET', 'Azure', 'Git', 'LLMs', 'Static Analysis'],
-    footnote: 'Internal project — source unavailable'
+    stackLabel: 'Technologies',
+    stack: ['C#', '.NET', 'Git', 'LLMs', 'Static Analysis', 'GitHub Copilot', 'Qwen']
   },
   {
     id: 'bhasha',
@@ -233,36 +239,99 @@ function getLayoutMode() {
 }
 
 function IslandBody({ job }) {
+  const title = job.logo ? (
+    job.logoHref ? (
+      <a
+        className="exp-island__logo-link"
+        href={job.logoHref}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img className="exp-island__logo" src={job.logo} alt={job.headline} />
+      </a>
+    ) : (
+      <img className="exp-island__logo" src={job.logo} alt={job.headline} />
+    )
+  ) : job.product ? (
+    <>
+      <h3 className="exp-island__title exp-island__title--role">{job.kicker}</h3>
+      {job.subhead ? <p className="exp-island__sub">{job.subhead}</p> : null}
+      <h4 className="exp-island__product">{job.product}</h4>
+    </>
+  ) : (
+    <h3 className="exp-island__title">{job.headline}</h3>
+  );
+
   return (
     <>
-      <p className="exp-island__kicker">{job.kicker}</p>
-      <h3 className="exp-island__title">{job.headline}</h3>
-      <p className="exp-island__sub">{job.subhead}</p>
+      {job.product ? null : <p className="exp-island__kicker">{job.kicker}</p>}
+      {title}
+      {!job.product && job.subhead ? <p className="exp-island__sub">{job.subhead}</p> : null}
+      {job.intro ? <p className="exp-island__intro">{job.intro}</p> : null}
 
-      <div className={`exp-metrics exp-metrics--chips${job.metrics.length > 3 ? ' exp-metrics--four' : ''}`}>
-        {job.metrics.map((metric) => (
-          <div key={metric.label} className="exp-metric">
-            <strong>{metric.value}</strong>
-            <span>{metric.label}</span>
-          </div>
-        ))}
-      </div>
+      {job.metrics?.length ? (
+        <div className={`exp-metrics exp-metrics--chips${job.metrics.length > 3 ? ' exp-metrics--four' : ''}`}>
+          {job.metrics.map((metric) => (
+            <div key={metric.label} className="exp-metric">
+              <strong>{metric.value}</strong>
+              <span>{metric.label}</span>
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       {job.surfaces ? (
-        <div className={`exp-surfaces${job.surfaces.length > 2 ? ' exp-surfaces--four' : ''}`}>
-          {job.surfaces.map((surface) => (
-            <div key={surface.title} className="exp-surface">
+        <div
+          className={`exp-surfaces${job.surfaces.length === 1 ? ' exp-surfaces--one' : ''}${
+            job.surfaces.length > 2 ? ' exp-surfaces--four' : ''
+          }`}
+        >
+          {job.surfaces.map((surface) => {
+            const media = surface.image ? (
+              <img
+                className={`exp-surface__image${surface.fit === 'contain' ? ' exp-surface__image--contain' : ''}`}
+                src={surface.image}
+                alt={surface.title}
+              />
+            ) : (
               <div className="exp-surface__screen">
                 <span className="exp-surface__bar" />
                 <span className="exp-surface__bar exp-surface__bar--short" />
                 <span className="exp-surface__chip" />
               </div>
-              <p>{surface.title}</p>
-              <span>{surface.note}</span>
-            </div>
-          ))}
+            );
+
+            const body = (
+              <>
+                {media}
+                {surface.title && !surface.imageOnly ? <p>{surface.title}</p> : null}
+                {surface.note && !surface.imageOnly ? <span>{surface.note}</span> : null}
+              </>
+            );
+
+            return surface.href ? (
+              <a
+                key={surface.title}
+                className={`exp-surface${surface.featured ? ' exp-surface--featured' : ''}`}
+                href={surface.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {body}
+              </a>
+            ) : (
+              <div
+                key={surface.title}
+                className={`exp-surface${surface.featured ? ' exp-surface--featured' : ''}`}
+              >
+                {body}
+              </div>
+            );
+          })}
         </div>
       ) : null}
+
+      {job.techLine ? <p className="exp-tech-line">{job.techLine}</p> : null}
 
       {job.flows?.map((flow) => (
         <div key={flow.title} className="exp-island__block">
@@ -273,16 +342,37 @@ function IslandBody({ job }) {
 
       {job.sections.map((section) => (
         <div key={section.title} className="exp-island__block">
-          <p className="exp-island__label">{section.title}</p>
-          <p className="exp-island__copy">{section.body}</p>
+          {section.bullets?.length || section.subtitle ? (
+            section.title === 'What I built' ? (
+              <p className="exp-island__label">{section.title}</p>
+            ) : (
+              <h4 className="exp-island__heading">{section.title}</h4>
+            )
+          ) : (
+            <p className="exp-island__label">{section.title}</p>
+          )}
+          {section.subtitle ? <p className="exp-island__subtitle">{section.subtitle}</p> : null}
+          {section.bullets?.length ? (
+            <ul className="exp-island__bullets">
+              {section.bullets.map((bullet) => (
+                <li key={bullet}>{bullet}</li>
+              ))}
+            </ul>
+          ) : null}
+          {section.body ? <p className="exp-island__copy">{section.body}</p> : null}
         </div>
       ))}
 
-      <div className="exp-island__stack">
-        {job.stack.map((tech) => (
-          <span key={tech}>{tech}</span>
-        ))}
-      </div>
+      {job.stack?.length ? (
+        <div className="exp-island__block">
+          {job.stackLabel ? <p className="exp-island__label">{job.stackLabel}</p> : null}
+          <div className="exp-island__stack">
+            {job.stack.map((tech) => (
+              <span key={tech}>{tech}</span>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {job.links?.length ? (
         <div className="exp-island__actions">

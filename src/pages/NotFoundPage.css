@@ -1,0 +1,198 @@
+.nf-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #111827;
+  color: #f3f4f6;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.nf-page--play {
+  grid-template-columns: 1fr;
+}
+
+.nf-ether {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.nf-ether .liquid-ether-container {
+  width: 100%;
+  height: 100%;
+}
+
+.nf-grid {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  pointer-events: none;
+}
+
+.nf-grid--half {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.nf-grid--full {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.nf-panel {
+  position: relative;
+  z-index: 2;
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  background: linear-gradient(
+    90deg,
+    rgba(17, 24, 39, 0.15) 0%,
+    rgba(17, 24, 39, 0.55) 35%,
+    rgba(17, 24, 39, 0.72) 100%
+  );
+  border-left: 1px solid rgba(167, 139, 250, 0.22);
+  animation: nfIn 0.45s ease both;
+}
+
+.nf-kicker {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(196, 181, 253, 0.75);
+}
+
+.nf-code {
+  margin: 0;
+  font-size: clamp(5.5rem, 16vw, 10rem);
+  line-height: 0.9;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(139, 92, 246, 0.35);
+}
+
+.nf-copy {
+  margin: 0.25rem 0 0.5rem;
+  max-width: 18rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(209, 213, 219, 0.88);
+}
+
+.nf-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.nf-btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.15rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.nf-btn:active {
+  transform: scale(0.98);
+}
+
+.nf-btn--primary {
+  border: 1px solid rgba(167, 139, 250, 0.55);
+  background: rgba(139, 92, 246, 0.28);
+  color: #f5f3ff;
+}
+
+.nf-btn--primary:hover {
+  background: rgba(139, 92, 246, 0.42);
+  border-color: rgba(196, 181, 253, 0.8);
+}
+
+.nf-btn--ghost {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(17, 24, 39, 0.35);
+  color: rgba(243, 244, 246, 0.92);
+}
+
+.nf-btn--ghost:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(17, 24, 39, 0.55);
+}
+
+.nf-playbar {
+  position: absolute;
+  z-index: 3;
+  top: 1.25rem;
+  right: 1.25rem;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  justify-self: end;
+  align-self: start;
+  pointer-events: auto;
+  animation: nfIn 0.35s ease both;
+}
+
+@keyframes nfIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .nf-page {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+
+  .nf-grid--half {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 48vh;
+  }
+
+  .nf-panel {
+    grid-column: 1;
+    grid-row: 2;
+    align-items: center;
+    text-align: center;
+    border-left: none;
+    border-top: 1px solid rgba(167, 139, 250, 0.22);
+    background: linear-gradient(
+      180deg,
+      rgba(17, 24, 39, 0.2) 0%,
+      rgba(17, 24, 39, 0.78) 40%,
+      rgba(17, 24, 39, 0.92) 100%
+    );
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .nf-actions {
+    justify-content: center;
+  }
+
+  .nf-code {
+    font-size: clamp(4.5rem, 28vw, 7rem);
+  }
+}

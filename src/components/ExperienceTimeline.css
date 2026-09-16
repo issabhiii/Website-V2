@@ -286,9 +286,12 @@
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  padding: 1.25rem 1.35rem 1.15rem;
-  max-height: calc(100vh - 7.25rem);
+  padding: 1rem 1.15rem 0.95rem;
+  max-height: calc(100vh - 6.5rem);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .exp-island__close {
@@ -328,16 +331,88 @@
   color: #fff;
 }
 
+.exp-island__title--role {
+  margin: 0 2.2rem 0 0;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.exp-island__product {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.25rem, 1.9vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.exp-island__intro {
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: rgba(229, 231, 235, 0.88);
+}
+
+.exp-island__logo-link {
+  display: inline-flex;
+  max-width: min(100%, 17rem);
+  margin-top: 0.15rem;
+}
+
+.exp-island__logo {
+  display: block;
+  width: 100%;
+  max-height: 2.6rem;
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
+}
+
 .exp-island__sub {
   margin: 0.35rem 0 0;
   color: rgba(209, 213, 219, 0.82);
 }
 
+.exp-island__heading {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-transform: none;
+}
+
+.exp-island__subtitle {
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+  color: #c4b5fd;
+}
+
+.exp-island__bullets {
+  margin: 0.4rem 0 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.28rem;
+}
+
+.exp-island__bullets li {
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: rgba(229, 231, 235, 0.88);
+}
+
+.exp-tech-line {
+  margin: 0.75rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: #ddd6fe;
+}
+
 .exp-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.7rem;
-  margin: 0.85rem 0 0.2rem;
+  gap: 0.55rem;
+  margin: 0.55rem 0 0.1rem;
 }
 
 .exp-metrics--four {
@@ -367,7 +442,8 @@
 }
 
 .exp-island__block {
-  margin-top: 0.75rem;
+  margin-top: 0.55rem;
+  min-width: 0;
 }
 
 .exp-island__label {
@@ -430,7 +506,13 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
-  margin-top: 0.75rem;
+  margin-top: 0.55rem;
+  flex: 0 1 auto;
+  min-height: 0;
+}
+
+.exp-surfaces--one {
+  grid-template-columns: 1fr;
 }
 
 .exp-surfaces--four {
@@ -442,6 +524,19 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.03);
   padding: 0.5rem;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  min-width: 0;
+}
+
+a.exp-surface:hover {
+  border-color: rgba(167, 139, 250, 0.55);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.exp-surface--featured {
+  padding: 0.35rem;
 }
 
 .exp-surface__screen {
@@ -452,6 +547,37 @@
   border-radius: 10px;
   padding: 0.4rem;
   background: linear-gradient(160deg, rgba(139, 92, 246, 0.28), rgba(17, 24, 39, 0.9));
+}
+
+.exp-surface__image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: clamp(12rem, 40vh, 24rem);
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 10px;
+  background: rgba(17, 24, 39, 0.9);
+}
+
+.exp-surface__image--contain {
+  height: clamp(5.5rem, 14vh, 7.5rem);
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+  padding: 0.55rem 0.85rem;
+}
+
+@media (max-height: 860px) {
+  .exp-surface__image {
+    height: clamp(10rem, 28vh, 16rem);
+  }
+}
+
+@media (max-height: 740px) {
+  .exp-surface__image {
+    height: clamp(8rem, 22vh, 12rem);
+  }
 }
 
 .exp-surface__bar {
@@ -502,14 +628,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  margin-top: 0.85rem;
+  margin-top: 0.45rem;
 }
 
 .exp-island__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.6rem;
-  margin-top: 0.75rem;
+  margin-top: 0.55rem;
 }
 
 .exp-island__actions a {
@@ -539,7 +665,7 @@
   display: flex;
   flex-wrap: wrap;
   grid-template-columns: none;
-  gap: 0.45rem;
+  gap: 0.35rem;
 }
 
 .exp-metrics--chips .exp-metric {
@@ -682,11 +808,36 @@
   }
 
   .exp-surfaces {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .exp-surfaces--four {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .exp-surface__image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 12rem;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .exp-surface__image--contain {
+    aspect-ratio: auto;
+    height: auto;
+    max-height: 5.5rem;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .exp-island--inline {
+    overflow: visible;
+  }
+
+  .exp-island--inline .exp-surface__image {
+    max-height: 14rem;
   }
 }
 
